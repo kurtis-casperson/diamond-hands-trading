@@ -6,7 +6,6 @@ const NavBar = () => {
   return (
     <Navbar
       collapseOnSelect
-   
       expand="sm"
       bg="*"
       variant="dark"
@@ -34,7 +33,7 @@ const NavBar = () => {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link href="/Trade">Trade</Nav.Link>
+                <Nav.Link id="trade" href="/Trade">Trade</Nav.Link>
               </Nav.Item>
              
             </div>
