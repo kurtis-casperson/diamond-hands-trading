@@ -26,7 +26,7 @@ const [stockResultData, setStockResultData] = useState([])
       stockSearchInput={stockSearchInput}
       setStockSearchInput={setStockSearchInput}
       stockResultData={stockResultData}
-      // setStockResultData={setStockResultData}
+      setStockResultData={setStockResultData}
       />
         
 </>
