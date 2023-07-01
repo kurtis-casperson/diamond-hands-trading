@@ -1,24 +1,34 @@
 
-import { FC } from "react"
-import TickerSearchTable from "./TickerSearchTable"
+import StockSearchTable from "./StockSearchTable"
 
-export interface Props {
-    // map(arg0: (symbol: any, name: any) => import("react/jsx-runtime").JSX.Element): unknown
+type Props = {
     stockSearchInput: string
     setStockSearchInput: (value: string) => void
     stockResultData: { name: string; symbol: string}[]
-    // setStockResultData: (value: string[]) => void
-
+    setStockResultData: React.Dispatch<React.SetStateAction<never[]>>
 }
 
-
-const SearchBar: FC<Props> = ({setStockSearchInput,stockSearchInput, stockResultData } ) => {
-
+const SearchBar = ({setStockSearchInput,stockSearchInput, stockResultData, setStockResultData }: Props ) => {
 
 const handleInputSearch = (e: any) => {
     setStockSearchInput(e.target.value)
     }
     
+const fetchData =  async () => {
+
+    try {
+        const response = await axios.get(`/api/stock/search/${stockSearchInput}`)
+        setStockResultData(response.data)
+      } catch (error) {
+  
+        console.error(error)
+      }
+
+
+}
+
+
+
 
   return (
     <>
@@ -27,12 +37,17 @@ const handleInputSearch = (e: any) => {
      <input className="border-2 border-gray-300 bg-white h-10 px-5 pr-5 rounded-lg focus:outline-none"
       type="search" name="search" placeholder="Search a ticker or company" value={stockSearchInput}
       onChange={handleInputSearch}></input>
-  <button className="bg-green-300 hover:bg-green-500 text-white font-bold py-2 px-2 rounded-full">
+  <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-2 rounded-full"
+  onClick={() => {
+    fetchData()
+    setStockSearchInput('')
+  }}
+  >
 Search
 </button>
 </div>
 <div>
-<TickerSearchTable 
+<StockSearchTable 
  stockResultData={stockResultData}
  
 />
