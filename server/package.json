@@ -7,7 +7,7 @@
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "nodemon back-end/index.ts"
+    "start": "nodemon index.ts"
   },
   "dependencies": {
     "axios": "^1.4.0",
