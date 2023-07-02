@@ -1,5 +1,5 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap'
-import { Sun, MoonFill, Gem } from 'react-bootstrap-icons'
+import { Gem } from 'react-bootstrap-icons'
 
 import './NavBar.css'
 const NavBar = () => {
@@ -8,8 +8,7 @@ const NavBar = () => {
       collapseOnSelect
       expand="sm"
       bg="*"
-      variant="dark"
-      
+      variant="dark"    
     >
       <Container className="navBarContainer">
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
