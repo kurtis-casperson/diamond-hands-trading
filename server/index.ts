@@ -12,11 +12,9 @@ app.listen(PORT, () => {
   console.log(`listening on ${PORT}`)
 })
 
-
 app.use(cors({ origin: 'http://localhost:5173', optionsSuccessStatus: 200 }))
 
 app.use(express.static(path.join(__dirname, '../../client/dist')))
-
 
 app.get('/:route(Search|Random)', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'))
@@ -34,7 +32,7 @@ app.get(
     try {
       const { stockSearchInput } = req.params
       const response = await axios.get(
-        `https://financialmodelingprep.com/api/v3/search?query=${stockSearchInput}&limit=10&exchange=NASDAQ&apikey=${process.env.FMP_API_KEY}`
+        `https://financialmodelingprep.com/api/v3/search?query=aapl&limit=10&exchange=NASDAQ&apikey=${process.env.FMP_API_KEY}`
 
         // headers
       )
