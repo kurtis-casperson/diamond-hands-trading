@@ -1,21 +1,10 @@
 
 
-
-
-// why do I have errors using interface?
-// export interface Props {
-//   map(arg0: (symbol: any, name: any) => import("react/jsx-runtime").JSX.Element): unknown
-//   stockResultData: { name: string; symbol: string}[]
-
-//   // stockResultData: Object[]
-//   setStockResultData: (value: string[]) => void
-
-// }
 type Props = {
   stockResultData: { name: string; symbol: string}[]
   
 }
-const StockSearchTable  = ({stockResultData}: Props) => {
+const StockSearchTableRows  = ({stockResultData}: Props) => {
 
 // make table rows selectable
 
@@ -37,5 +26,6 @@ const StockSearchTable  = ({stockResultData}: Props) => {
     )
   }
   
-  export default StockSearchTable
+  export default StockSearchTableRows
+  
   

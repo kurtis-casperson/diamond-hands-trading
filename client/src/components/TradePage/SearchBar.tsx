@@ -1,5 +1,5 @@
 
-import StockSearchTable from "./StockSearchTable"
+import StockSearchTable from "./StockSearchTableRows"
 import axios from "axios";
 type Props = {
     stockSearchInput: string
@@ -19,7 +19,7 @@ const fetchData =  async () => {
     try {
         const response = await axios.get(`/api/stock/search/${stockSearchInput}`)
         setStockResultData(response.data)
-        console.log( 'response.data',response.data)
+        console.log( 'response',response)
       } catch (error) {
   
         console.error(error)

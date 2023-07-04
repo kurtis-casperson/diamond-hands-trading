@@ -16,13 +16,13 @@ app.use(cors({ origin: 'http://localhost:5173', optionsSuccessStatus: 200 }))
 
 app.use(express.static(path.join(__dirname, '../../client/dist')))
 
-app.get('/:route(Search|Random)', (req: Request, res: Response) => {
+app.get('/:route(Trade|Login)', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'))
 })
 
 // const headers: Object = {
 //   headers: {
-//     Authorization: ` ${process.env.FINHUB_API_KEY}`,
+//     Authorization: `${process.env.FMP_API_KEY}`,
 //   },
 // }
 
@@ -32,14 +32,14 @@ app.get(
     try {
       const { stockSearchInput } = req.params
       const response = await axios.get(
-        `https://financialmodelingprep.com/api/v3/search?query=aapl&limit=10&exchange=NASDAQ&apikey=${process.env.FMP_API_KEY}`
+        `https://financialmodelingprep.com/api/v3/search?query=aapl&limit=10&exchange=NASDAQ&apikey=20b2789287f5916848e6a70d6f5322db`
 
         // headers
       )
 
+      console.log('response-server', response)
       const data = response.data
       res.json(data)
-      console.log(response.data)
     } catch (error) {
       console.error(error)
       res.status(500).json({ error: 'Internal server error' })
