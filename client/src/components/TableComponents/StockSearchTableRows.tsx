@@ -2,12 +2,10 @@
 
 type Props = {
   stockResultData: { name: string; symbol: string}[]
-  
 }
 const StockSearchTableRows  = ({stockResultData}: Props) => {
 
 // make table rows selectable
-
     return (
       <>
         {stockResultData.map((stock, index) => (

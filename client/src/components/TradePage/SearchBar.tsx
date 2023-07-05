@@ -1,5 +1,5 @@
 
-import StockSearchTable from "./StockSearchTableRows"
+import StockTableHeader from "../TableComponents/StockTableHeader";
 import axios from "axios";
 type Props = {
     stockSearchInput: string
@@ -48,7 +48,7 @@ Search
 </button>
 </div>
 <div>
-<StockSearchTable 
+<StockTableHeader
  stockResultData={stockResultData}
  
 />
