@@ -7,17 +7,6 @@ const [stockSearchInput, setStockSearchInput] = useState<string>('')
 const [stockResultData, setStockResultData] = useState([])
 
 
-// when the submit button is clicked the request is made for the ticker symbol
-
-
-
-
-
-// select a symbol, and a modal appears to be able to trade the stock
-
-
-
-
     return (
 <>
 
