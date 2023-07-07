@@ -7,11 +7,14 @@ const TradeModal = ({stockSymbol}: any) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  
 // when the the modal is shown the price is shown of the stock
 // and portfolio value 
+// get current price of the stock
+// create a table with all of the stock inputs for buy and sell
   return (
     <>
-    <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-2 rounded-full" onClick={handleShow} >
+    <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-1 px-1 rounded-full" onClick={handleShow} >
     Trade {stockSymbol}
     </button>
       {/* <Button variant="secondary" onClick={handleShow}>
@@ -25,11 +28,10 @@ const TradeModal = ({stockSymbol}: any) => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
+          <Modal.Title>{stockSymbol}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          I will not close if you click outside me. Don not even try to press
-          escape key.
+         
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
