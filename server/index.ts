@@ -40,3 +40,22 @@ app.get(
     }
   }
 )
+
+app.get(
+  '/api/stock/price/:stockSymbol',
+  async (req: Request, res: Response) => {
+    try {
+      const { stockSymbol } = req.params
+
+      const response = await axios.get(
+        `finnhub.io/api/v1/quote?symbol=${stockSymbol}`
+      )
+
+      const data = response.data
+      res.json(data)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  }
+)
