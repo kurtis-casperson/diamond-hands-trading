@@ -13,14 +13,14 @@ const [stockPrice, setStockPrice] = useState('');
 // get current price of the stock
 // create a table with all of the stock inputs for buy and sell
 
-const fetchData =  async (stockSymbol: any) => {
+const fetchData =  async (stockSymbol: any, handleShow: any) => {
 
     try {
         const response = await axios.get(`/api/stock/price/${stockSymbol}`)
         setStockPrice(response.data)
+        handleShow()
         console.log( 'response',response)
       } catch (error) {
-  
         console.error(error)
       }
 
@@ -28,32 +28,38 @@ const fetchData =  async (stockSymbol: any) => {
 
   return (
     <>
-    <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-1 px-1 rounded-full" onClick={handleShow} >
+    <button className="bg-green-400 hover:bg-green-500 font-bold py-1 px-1 rounded-full " onClick={()=>{fetchData(stockSymbol, handleShow)}} >
     Trade {stockSymbol}
     </button>
-      {/* <Button variant="secondary" onClick={handleShow}>
-       Trade {stockSymbol}
-      </Button> */}
 
       <Modal
         show={show}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
+       
       >
         <Modal.Header closeButton>
-          <Modal.Title>{stockSymbol}</Modal.Title>
+          <Modal.Title
+           style={{
+            justifyContent: 'space-between',
+            display: 'flex',
+            width: '100%',
+          }}
+          >{stockSymbol}
+          <div>
+        <p className="text-green-400 font-bold p-2" >$ {stockPrice}</p>
+        </div>
+        </Modal.Title>
+        {/* {show === true ? fetchData(stockSymbol) : } */}
         </Modal.Header>
         <Modal.Body>
-        <p className="font-extralight text-green-400 p-2" > {stockPrice}</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => {
-            fetchData(stockSymbol)
-          }}>
+          <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">Understood</Button>
+          <Button variant="primary">Submit</Button>
         </Modal.Footer>
       </Modal>
     </>

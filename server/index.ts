@@ -22,12 +22,6 @@ app.get('/:route(Trade|Login)', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'))
 })
 
-// const headers: Object = {
-//   headers: {
-//     Authorization: `${process.env.FINHUB_API_KEY}`,
-//   },
-// }
-
 app.get(
   '/api/stock/search/:stockSearchInput',
   async (req: Request, res: Response) => {
@@ -55,11 +49,10 @@ app.get(
 
       const response = await axios.get(
         `https://finnhub.io/api/v1/quote?symbol=${stockSymbol}&token=${process.env.FINHUB_API_KEY}`
-
-        // headers
       )
 
-      const data = response.data
+      const data = response.data.c
+
       res.json(data)
     } catch (error) {
       console.error('error', error)
