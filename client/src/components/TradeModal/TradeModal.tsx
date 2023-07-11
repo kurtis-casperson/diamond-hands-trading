@@ -2,9 +2,10 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
-const TradeModal = ({stockSymbol}: any) => {
+const TradeModal = ({stockSymbol}: any, {portfolioValue}: any, ) => {
   const [show, setShow] = useState(false);
 const [stockPrice, setStockPrice] = useState('');
+const [buyShares, setBuyShares] = useState('')
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   
@@ -25,6 +26,12 @@ const fetchData =  async (stockSymbol: any, handleShow: any) => {
       }
 
 }
+
+const handleInput = (e: any) => {
+  setBuyShares(e.target.value)
+  }
+  
+
 
   return (
     <>
@@ -51,9 +58,26 @@ const fetchData =  async (stockSymbol: any, handleShow: any) => {
         <p className="text-green-400 font-bold p-2" >$ {stockPrice}</p>
         </div>
         </Modal.Title>
-        {/* {show === true ? fetchData(stockSymbol) : } */}
         </Modal.Header>
         <Modal.Body>
+      <div>
+        <h3>Available Cash: {portfolioValue}</h3>
+      </div>
+         
+            <div className="row-one">
+            <input
+              type="number"
+              placeholder="Shares to Buy"
+              name="shares"
+              // value={}
+              onChange={handleInput}
+            ></input>
+         
+        <button className="bg-green-400 hover:bg-green-500 font-bold py-1 px-1 rounded-full " onClick={()=>{fetchData(stockSymbol, handleShow)}} >
+    Buy
+    </button>
+    </div>
+   
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
