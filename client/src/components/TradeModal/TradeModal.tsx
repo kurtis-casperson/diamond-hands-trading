@@ -2,7 +2,16 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
-const TradeModal = ({stockSymbol}: any, {portfolioValue}: any, ) => {
+
+// type Props = {
+//   portfolioValue: number;
+//   // stockSymbol: string;
+// }
+
+
+const TradeModal = ({stockSymbol}: any,  ) => {
+  // how to pass portfolioValue into the modal? is Portoflio a child of TradeModal?
+  const [portfolioValue, setPortfolioValue] = useState(100000)
   const [show, setShow] = useState(false);
 const [stockPrice, setStockPrice] = useState('');
 const [buyShares, setBuyShares] = useState('')
@@ -27,7 +36,14 @@ const fetchData =  async (stockSymbol: any, handleShow: any) => {
 
 }
 
-const handleInput = (e: any) => {
+
+const shareValue = (stockPrice:any, buyShares: any ) => {
+let purchaseValue: any = stockPrice * buyShares
+setPortfolioValue(portfolioValue - purchaseValue)
+
+}
+
+const handleInputNumberShares = (e: any) => {
   setBuyShares(e.target.value)
   }
   
@@ -70,7 +86,7 @@ const handleInput = (e: any) => {
               placeholder="Shares to Buy"
               name="shares"
               // value={}
-              onChange={handleInput}
+              onChange={handleInputNumberShares}
             ></input>
          
         <button className="bg-green-400 hover:bg-green-500 font-bold py-1 px-1 rounded-full " onClick={()=>{fetchData(stockSymbol, handleShow)}} >
@@ -83,7 +99,9 @@ const handleInput = (e: any) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">Submit</Button>
+          <Button variant="primary"
+          onClick={()=>{shareValue(stockPrice, buyShares)}}
+          >Submit</Button>
         </Modal.Footer>
       </Modal>
     </>

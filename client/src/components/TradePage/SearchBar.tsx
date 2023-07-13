@@ -29,8 +29,6 @@ const fetchData =  async () => {
 }
 
 
-
-
   return (
     <>
     <div className="content-center">
