@@ -3,15 +3,17 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
-// type Props = {
-//   portfolioValue: number;
-//   // stockSymbol: string;
-// }
+type Props = {
+  
+  stockSymbol: any;
+  portfolioValue: number
+  setPortfolioValue: (value: number) => void
+}
 
 
-const TradeModal = ({stockSymbol}: any,  ) => {
+const TradeModal = ({stockSymbol, portfolioValue, setPortfolioValue }: Props,  ) => {
   // how to pass portfolioValue into the modal? is Portoflio a child of TradeModal?
-  const [portfolioValue, setPortfolioValue] = useState(100000)
+  // const [portfolioValue, setPortfolioValue] = useState(100000)
   const [show, setShow] = useState(false);
 const [stockPrice, setStockPrice] = useState('');
 const [buyShares, setBuyShares] = useState('')

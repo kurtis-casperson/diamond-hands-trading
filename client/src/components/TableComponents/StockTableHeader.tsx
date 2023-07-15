@@ -3,10 +3,11 @@ import { Table } from 'react-bootstrap'
 
 type Props = {
   stockResultData: { name: string; symbol: string}[]
-  
+  portfolioValue: number
+  setPortfolioValue: (value: number) => void
 }
 
-const StockTableHeader = ({ stockResultData }: Props) => {
+const StockTableHeader = ({ stockResultData, portfolioValue, setPortfolioValue }: Props) => {
   return (
     <>
       <Table id="tableCharacterData" striped bordered hover variant="dark">
@@ -19,7 +20,7 @@ const StockTableHeader = ({ stockResultData }: Props) => {
         </thead>
 
         <tbody>
-          <StockSearchTableRows stockResultData={stockResultData} />
+          <StockSearchTableRows stockResultData={stockResultData} portfolioValue={portfolioValue} setPortfolioValue={setPortfolioValue}  />
         </tbody>
       </Table>
     </>
