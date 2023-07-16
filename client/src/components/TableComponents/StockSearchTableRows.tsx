@@ -16,7 +16,7 @@ const StockSearchTableRows  = ({stockResultData, portfolioValue, setPortfolioVal
             <td>{stock.name}</td>
             <td>{stock.symbol}</td>
            <td>
-            <TradeModal stockSymbol={stock.symbol} portfolioValue={portfolioValue} setPortfolioValue={setPortfolioValue}/>
+            <TradeModal stockSymbol={stock.symbol} stockName={stock.name} portfolioValue={portfolioValue} setPortfolioValue={setPortfolioValue}/>
             </td>
           </tr>
         ))}

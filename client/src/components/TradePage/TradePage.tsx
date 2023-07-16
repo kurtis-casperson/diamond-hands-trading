@@ -4,7 +4,7 @@ import StockTableHeader from '../TableComponents/StockTableHeader'
 
 
 const TradePage: FC = () => {
-const [stockSearchInput, setStockSearchInput] = useState<string>('')
+const [searchQuery, setSearchQuery] = useState<string>('')
 const [stockResultData, setStockResultData] = useState([])
 const [portfolioValue, setPortfolioValue] = useState(100000)
 
@@ -13,8 +13,8 @@ const [portfolioValue, setPortfolioValue] = useState(100000)
 
       <div>Trade</div>
       <SearchBar
-      stockSearchInput={stockSearchInput}
-      setStockSearchInput={setStockSearchInput}
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
       stockResultData={stockResultData}
       setStockResultData={setStockResultData}
       />
