@@ -6,6 +6,11 @@ type Props = {
   
 }
 
+
+
+// add data row if the stock does not already have row.
+// if row exists then update row with the stock value
+
 const PortfolioTable = ({ stockResultData }: Props) => {
   return (
     <>
@@ -15,6 +20,7 @@ const PortfolioTable = ({ stockResultData }: Props) => {
             <th>Name</th>
             <th>Symbol</th>
             <th>Value</th>
+            <th>Trade</th>
           </tr>
         </thead>
 
