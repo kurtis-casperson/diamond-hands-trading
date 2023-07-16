@@ -18,7 +18,7 @@ app.use(cors({ origin: 'http://localhost:5173', optionsSuccessStatus: 200 }))
 
 app.use(express.static(path.join(__dirname, '../../client/dist')))
 
-app.get('/:route(Trade|Login)', (req: Request, res: Response) => {
+app.get('/:route(Trade|Login|Portfolio)', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'))
 })
 
@@ -60,3 +60,26 @@ app.get(
     }
   }
 )
+
+// const { Client } = require('pg')
+
+// const portfolioTable = new Client({
+//   host: 'localhost',
+//   user: 'postgres',
+//   port: 5432,
+//   database: 'postgres',
+// })
+
+// portfolioTable.connect()
+
+// portfolioTable.query(
+//   'SELECT * FROM public. "Stock_Portfolio"',
+//   (err: any, res: any) => {
+//     if (!err) {
+//       console.log(res)
+//     } else {
+//       console.log('err.message', err.message)
+//     }
+//     portfolioTable.end
+//   }
+// )
