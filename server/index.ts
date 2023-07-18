@@ -9,6 +9,7 @@ const cors = require('cors')
 const path = require('path')
 require('dotenv').config()
 dotenv.config()
+app.use(express.json())
 
 app.listen(PORT, () => {
   console.log(`listening on ${PORT}`)
@@ -81,8 +82,8 @@ portfolioTable.query(
   }
 )
 
-app.post('/api/trade', (req, res) => {
-  const { Name, Symbol } = req.body
-  console.log('tradeVariables', Name, Symbol)
+app.post('/api/trade', (req: Request, res: Response) => {
+  const { name, symbol } = req.body
+  console.log('tradeVariables', name, symbol)
   // console.log(req.body, req.query, req.params)
 })

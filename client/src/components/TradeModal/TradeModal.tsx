@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import FocusRefComponent from './FocusRefComponent';
+import FocusRefComponent from './focusRefComponent';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
@@ -53,22 +53,13 @@ const handleInputNumberShares = (e: any) => {
   // shareValue:(stockPrice:number, numberShares: number) => void,
   const submitTrade = async (stockSymbol: string, stockName: string   ) => {
 
-  try{
-    // const tradeVariables = {
-      
-    //     'Name': stockName,
-    //     'Symbol': stockSymbol,
-    //     // 'Value': purchaseValue
-    
-    // }
-// console.log('tradeVariables', tradeVariables)
+  try{ 
+
 let response = await axios.post('/api/trade', {
-      'name': stockName,
-      'symbol': stockSymbol
-  })
-    // .then((response: any) => {
-    //   console.log(response.data);
-    // })
+  name: stockName,
+  symbol: stockSymbol
+})
+
     console.log(response.data)
   } catch (error) {
     console.error(error);
