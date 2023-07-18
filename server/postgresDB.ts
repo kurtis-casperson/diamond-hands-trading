@@ -39,15 +39,6 @@ portfolioTable.query(
   }
 )
 
-app.post('//api/trade/data', (req: Request, res: Response) => {})
-
-// try {
-//   const res = await portfolioTable.query(
-//     'SELECT * FROM public. "Stock_Portfolio"'
-//   )
-//   console.log(res)
-// } catch (err) {
-//   console.error(err)
-// } finally {
-//   await portfolioTable.end()
-// }
+app.post('/api/trade', (req: Request, res: Response) => {
+  const { tradeVariables } = req.body
+})

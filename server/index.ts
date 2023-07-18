@@ -61,25 +61,28 @@ app.get(
   }
 )
 
-// const { Client } = require('pg')
+const { Client } = require('pg')
 
-// const portfolioTable = new Client({
-//   host: 'localhost',
-//   user: 'postgres',
-//   port: 5432,
-//   database: 'postgres',
-// })
+const portfolioTable = new Client({
+  host: 'localhost',
+  user: 'postgres',
+  port: 5432,
+  database: 'postgres',
+})
 
-// portfolioTable.connect()
+portfolioTable.connect()
 
-// portfolioTable.query(
-//   'SELECT * FROM public. "Stock_Portfolio"',
-//   (err: any, res: any) => {
-//     if (!err) {
-//       console.log(res)
-//     } else {
-//       console.log('err.message', err.message)
-//     }
-//     portfolioTable.end
-//   }
-// )
+portfolioTable.query(
+  'SELECT * FROM public. "Stock_Portfolio"',
+  (err: any, res: any) => {
+    err ? console.log(err.message) : console.log(res)
+
+    portfolioTable.end
+  }
+)
+
+app.post('/api/trade', (req, res) => {
+  const { Name, Symbol } = req.body
+  console.log('tradeVariables', Name, Symbol)
+  // console.log(req.body, req.query, req.params)
+})

@@ -53,16 +53,22 @@ const handleInputNumberShares = (e: any) => {
   const submitTrade = async (stockSymbol: string, stockName: string   ) => {
 
   try{
-    const tradeVariables = {
+    // const tradeVariables = {
       
-        'Name': stockName,
-        'Symbol': stockSymbol,
-        // 'Value': purchaseValue
+    //     'Name': stockName,
+    //     'Symbol': stockSymbol,
+    //     // 'Value': purchaseValue
     
-    }
-
-    await axios.post('/api/trade/data', tradeVariables)
-
+    // }
+// console.log('tradeVariables', tradeVariables)
+let response = await axios.post('/api/trade', {
+      'Name': stockName,
+      'Symbol': stockSymbol
+  })
+    // .then((response: any) => {
+    //   console.log(response.data);
+    // })
+    console.log(response.data)
   } catch (error) {
     console.error(error);
    
