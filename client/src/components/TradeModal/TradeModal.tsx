@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import FocusRefComponent from './FocusRefComponent';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
@@ -62,8 +63,8 @@ const handleInputNumberShares = (e: any) => {
     // }
 // console.log('tradeVariables', tradeVariables)
 let response = await axios.post('/api/trade', {
-      'Name': stockName,
-      'Symbol': stockSymbol
+      'name': stockName,
+      'symbol': stockSymbol
   })
     // .then((response: any) => {
     //   console.log(response.data);
@@ -115,9 +116,7 @@ let response = await axios.post('/api/trade', {
               onChange={handleInputNumberShares}
             ></input>
          
-        <button className="bg-green-400 hover:bg-green-500 font-bold py-1 px-1 rounded-full " onClick={()=>{fetchData(stockSymbol, handleShow)}} >
-    Buy
-    </button>
+      <FocusRefComponent shareValue={shareValue}/>
     </div>
    
         </Modal.Body>
