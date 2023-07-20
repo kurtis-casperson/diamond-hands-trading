@@ -1,43 +1,59 @@
 
 import { Table } from 'react-bootstrap'
+import  { useEffect } from 'react';
+import { TableData } from './type'
 
 type Props = {
-  stockResultData: { name: string; symbol: string}[]
-  
+    tableData: TableData
+    setTableData: (value: TableData) => void;
 }
 
 
+const PortfolioTable = ({tableData, setTableData }: Props) => {
 
-// add data row if the stock does not already have row.
-// if row exists then update row with the stock value
 
-const PortfolioTable = ({ stockResultData }: Props) => {
+  useEffect(() => {
+    fetchData();
+  }, [tableData]);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/data'); // Replace with your API endpoint
+      const jsonData = await response.json();
+      setTableData(jsonData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+
   return (
     <>
       <Table id="tableCharacterData" striped bordered hover variant="dark">
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Company</th>
             <th>Symbol</th>
             <th>Value</th>
             <th>Trade</th>
           </tr>
         </thead>
 
-        <tbody>
-        {stockResultData.map((stock, index) => (
+        {/* <tbody>
+        {tableData.map((stock, index) => (
           <tr key={index}>
-            <td>{stock.name}</td>
+            <td>{stock.company}</td>
             <td>{stock.symbol}</td>
            <td>
            
             </td>
           </tr>
         ))}
-        </tbody>
+        </tbody> */}
       </Table>
     </>
   )
 }
 
 export default PortfolioTable
+
