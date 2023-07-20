@@ -82,8 +82,14 @@ portfolioTable.query(
   }
 )
 
-app.post('/api/trade', (req: Request, res: Response) => {
-  const { name, symbol } = req.body
-  console.log('tradeVariables', name, symbol)
-  // console.log(req.body, req.query, req.params)
+app.post('/api/trade', async (req: Request, res: Response) => {
+  try {
+    const { company, symbol } = req.body
+    const query = `INSERT INTO public."Stock_Portfolio" ( "Company","Symbol") VALUES ($1, $2)`
+    await portfolioTable.query(query, [company, symbol])
+    console.log('tradeVariables', company, symbol)
+  } catch (err) {
+    console.error('Error inserting data:', err)
+    res.status(500).json({ error: 'Error inserting data' })
+  }
 })
