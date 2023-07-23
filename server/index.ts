@@ -93,3 +93,14 @@ app.post('/api/trade', async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error inserting data' })
   }
 })
+
+app.post('/api/login', async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body
+
+    console.log(email, password)
+  } catch (err) {
+    console.error('Error logging in:', err)
+    res.status(500).json({ error: 'Error logging im' })
+  }
+})

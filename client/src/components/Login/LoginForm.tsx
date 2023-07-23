@@ -1,8 +1,11 @@
+// import {EventHandler } from 'react'
+import axios from 'axios';
 
 
 
 
 type Props = {
+    // EventHandler:  React.SyntheticEvent<any, Event> = (event: E) => void;
     email: string;
     setEmail: (value: string) => void;
     password: string
@@ -13,28 +16,49 @@ type Props = {
 
 const LoginForm = ({email,setEmail,password,setPassword }: Props) => {
    
+ 
+    const handleLogin = async (email: string, password: string) => {
 
-    
-    const handleLogin = (email: string, password: string) => {
-      // event.preventDefault();
-      // Handle login logic here
+      try{
+    let response =  await axios.post('/api/login', {
+email: email,
+password: password
+
+    })
+    console.log(response.data)
       console.log(' email:', email, ' password:', password);
+
+      }catch(error){
+console.log('login error', error)
+      }
     };
   
-    const handleSignup = ({email, password}: Props) => {
-      // event.preventDefault();
-      // Handle signup logic here
-      // post request with email and password
+    const handleSignup = async (email: string, password: string) => {
+        debugger
+   try{
+    let response =  await axios.post('/api/login', {
+        email: email,
+        password: password
+        
+            })
+            console.log(response.data)
+              console.log(' email:', email, ' password:', password);
+        
       console.log('signup email:', email, 'signup password:', password);
+   } catch(error){
+console.log('sign up error', error)
+   }
+
+
     };
 
 
-    function handleEmailChange(event: any) {
+    function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
        setEmail(event.target.value)
        
       }
 
-      function handlePasswordChange(event: any) {
+      function handlePasswordChange(event:  React.ChangeEvent<HTMLInputElement>) {
       setPassword(event.target.value)
         
        }
@@ -71,13 +95,13 @@ return(
   <div className="flex justify-center">
     <button
       className="bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring mr-4"
-      onClick={handleLogin}
+      onClick={() => handleLogin(email, password)}
     >
       Login
     </button>
     <button
       className="bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring"
-      onClick={handleSignup}
+      onClick={() => handleSignup(email, password)}
     >
       Sign Up
     </button>
