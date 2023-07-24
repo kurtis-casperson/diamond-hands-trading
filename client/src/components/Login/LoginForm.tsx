@@ -21,8 +21,8 @@ const LoginForm = ({email,setEmail,password,setPassword }: Props) => {
 
       try{
     let response =  await axios.post('/api/login', {
-email: email,
-password: password
+user_email: email,
+user_password: password
 
     })
     console.log(response.data)
@@ -37,8 +37,8 @@ console.log('login error', error)
         debugger
    try{
     let response =  await axios.post('/api/login', {
-        email: email,
-        password: password
+        user_email: email,
+        user_password: password
         
             })
             console.log(response.data)

@@ -74,7 +74,7 @@ const portfolioTable = new Client({
 portfolioTable.connect()
 
 portfolioTable.query(
-  'SELECT * FROM public. "Stock_Portfolio"',
+  'SELECT * FROM public. "stock_portfolio"',
   (err: any, res: any) => {
     err ? console.log(err.message) : console.log(res)
 
@@ -85,7 +85,7 @@ portfolioTable.query(
 app.post('/api/trade', async (req: Request, res: Response) => {
   try {
     const { company, symbol } = req.body
-    const query = `INSERT INTO public."Stock_Portfolio" ( "Company","Symbol") VALUES ($1, $2)`
+    const query = `INSERT INTO public."stock_portfolio" ( "company","symbol") VALUES ($1, $2)`
     await portfolioTable.query(query, [company, symbol])
     console.log('tradeVariables', company, symbol)
   } catch (err) {
@@ -94,13 +94,23 @@ app.post('/api/trade', async (req: Request, res: Response) => {
   }
 })
 
+portfolioTable.query(
+  'SELECT * FROM public. "user_data"',
+  (err: any, res: any) => {
+    err ? console.log(err.message) : console.log(res)
+
+    portfolioTable.end
+  }
+)
+
 app.post('/api/login', async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body
-
-    console.log(email, password)
+    const { user_email, user_password } = req.body
+    const query = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
+    await portfolioTable.query(query, [user_email, user_password])
+    console.log(user_email, user_password)
   } catch (err) {
     console.error('Error logging in:', err)
-    res.status(500).json({ error: 'Error logging im' })
+    res.status(500).json({ error: 'Error logging in' })
   }
 })
