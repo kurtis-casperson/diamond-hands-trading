@@ -36,7 +36,7 @@ console.log('login error', error)
     const handleSignup = async (email: string, password: string) => {
         debugger
    try{
-    let response =  await axios.post('/api/login', {
+    let response =  await axios.post('/api/signup', {
         user_email: email,
         user_password: password
         

@@ -103,6 +103,26 @@ portfolioTable.query(
   }
 )
 
+app.post('/api/signup', async (req: Request, res: Response) => {
+  try {
+    const { user_email, user_password } = req.body
+    const query = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
+    const selectedUsers = `SELECT "user_email" FROM public."user_data"`
+    // map over selectedUsers?
+
+    if (user_email !== selectedUsers) {
+      await portfolioTable.query(query, [user_email, user_password])
+      console.log(user_email, user_password)
+    } else {
+      res.send('User already exists, please signin')
+    }
+  } catch (err) {
+    console.error('Error logging in:', err)
+    res.status(500).json({ error: 'Error logging in' })
+  }
+})
+
+// this will check and authenticate
 app.post('/api/login', async (req: Request, res: Response) => {
   try {
     const { user_email, user_password } = req.body
