@@ -73,14 +73,14 @@ const portfolioTable = new Client({
 
 portfolioTable.connect()
 
-portfolioTable.query(
-  'SELECT * FROM public. "stock_portfolio"',
-  (err: any, res: any) => {
-    err ? console.log(err.message) : console.log(res)
+// portfolioTable.query(
+//   'SELECT * FROM public. "stock_portfolio"',
+//   (err: any, res: any) => {
+//     err ? console.log(err.message) : console.log(res)
 
-    portfolioTable.end
-  }
-)
+//     portfolioTable.end
+//   }
+// )
 
 app.post('/api/trade', async (req: Request, res: Response) => {
   try {
@@ -94,10 +94,26 @@ app.post('/api/trade', async (req: Request, res: Response) => {
   }
 })
 
+// portfolioTable.query(
+//   'SELECT * FROM public. "user_data"',
+//   (err: any, res: any) => {
+//     err ? console.log(err.message) : console.log(res)
+
+//     portfolioTable.end
+//   }
+// )
+
 portfolioTable.query(
-  'SELECT * FROM public. "user_data"',
+  `SELECT "user_email" FROM public."user_data"`,
   (err: any, res: any) => {
-    err ? console.log(err.message) : console.log(res)
+    let users = res.rows
+    console.log(users)
+    users.map((user: string) => {
+      // if(Object.values(user) === 'kcasperson7@gmail.com')
+      console.log(user)
+    })
+
+    // err ? console.log(err.message) : console.log(res.rows)
 
     portfolioTable.end
   }
@@ -109,6 +125,7 @@ app.post('/api/signup', async (req: Request, res: Response) => {
     const query = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
     const selectedUsers = `SELECT "user_email" FROM public."user_data"`
     // map over selectedUsers?
+    console.log('selectedUsers', selectedUsers)
 
     if (user_email !== selectedUsers) {
       await portfolioTable.query(query, [user_email, user_password])
@@ -123,14 +140,14 @@ app.post('/api/signup', async (req: Request, res: Response) => {
 })
 
 // this will check and authenticate
-app.post('/api/login', async (req: Request, res: Response) => {
-  try {
-    const { user_email, user_password } = req.body
-    const query = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
-    await portfolioTable.query(query, [user_email, user_password])
-    console.log(user_email, user_password)
-  } catch (err) {
-    console.error('Error logging in:', err)
-    res.status(500).json({ error: 'Error logging in' })
-  }
-})
+// app.post('/api/login', async (req: Request, res: Response) => {
+//   try {
+//     const { user_email, user_password } = req.body
+//     const query = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
+//     await portfolioTable.query(query, [user_email, user_password])
+//     console.log(user_email, user_password)
+//   } catch (err) {
+//     console.error('Error logging in:', err)
+//     res.status(500).json({ error: 'Error logging in' })
+//   }
+// })
