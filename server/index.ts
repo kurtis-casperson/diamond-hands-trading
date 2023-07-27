@@ -103,36 +103,39 @@ app.post('/api/trade', async (req: Request, res: Response) => {
 //   }
 // )
 
-portfolioTable.query(
-  `SELECT "user_email" FROM public."user_data"`,
-  (err: any, res: any) => {
-    let users = res.rows
-    console.log(users)
-    users.map((user: string) => {
-      // if(Object.values(user) === 'kcasperson7@gmail.com')
-      console.log(user)
-    })
+// portfolioTable.query(
+//   `SELECT "user_email" FROM public."user_data"`,
+//   (err: any, res: any) => {
+//     let users = res.rows
+//     console.log(typeof users)
+//     users.map((user: any) => {
+//       if (user.user_email === 'kcasperson7@gmail.com') return
+//       console.log(user.user_email)
+//     })
 
-    // err ? console.log(err.message) : console.log(res.rows)
+// err ? console.log(err.message) : console.log(res.rows)
 
-    portfolioTable.end
-  }
-)
+// portfolioTable.end
+//   }
+// )
 
-app.post('/api/signup', async (req: Request, res: Response) => {
+app.post('/api/signup', async (req: Request, res: any) => {
   try {
     const { user_email, user_password } = req.body
     const query = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
     const selectedUsers = `SELECT "user_email" FROM public."user_data"`
     // map over selectedUsers?
     console.log('selectedUsers', selectedUsers)
-
-    if (user_email !== selectedUsers) {
-      await portfolioTable.query(query, [user_email, user_password])
-      console.log(user_email, user_password)
-    } else {
-      res.send('User already exists, please signin')
-    }
+    console.log('res', res.ServerResponse)
+    let users = res.body
+    users.map(async (user: any) => {
+      if (user_email !== selectedUsers) {
+        await portfolioTable.query(query, [user_email, user_password])
+        console.log(user_email, user_password)
+      } else {
+        res.send('User already exists, please signin')
+      }
+    })
   } catch (err) {
     console.error('Error logging in:', err)
     res.status(500).json({ error: 'Error logging in' })
