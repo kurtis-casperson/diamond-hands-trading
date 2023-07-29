@@ -64,14 +64,14 @@ app.get(
 
 const { Client } = require('pg')
 
-const portfolioTable = new Client({
+const client = new Client({
   host: 'localhost',
   user: 'postgres',
   port: 5432,
   database: 'postgres',
 })
 
-portfolioTable.connect()
+client.connect()
 
 // portfolioTable.query(
 //   'SELECT * FROM public. "stock_portfolio"',
@@ -86,7 +86,7 @@ app.post('/api/trade', async (req: Request, res: Response) => {
   try {
     const { company, symbol } = req.body
     const query = `INSERT INTO public."stock_portfolio" ( "company","symbol") VALUES ($1, $2)`
-    await portfolioTable.query(query, [company, symbol])
+    await client.query(query, [company, symbol])
     console.log('tradeVariables', company, symbol)
   } catch (err) {
     console.error('Error inserting data:', err)
@@ -94,48 +94,23 @@ app.post('/api/trade', async (req: Request, res: Response) => {
   }
 })
 
-// portfolioTable.query(
-//   'SELECT * FROM public. "user_data"',
-//   (err: any, res: any) => {
-//     err ? console.log(err.message) : console.log(res)
-
-//     portfolioTable.end
-//   }
-// )
-
-// portfolioTable.query(
-//   `SELECT "user_email" FROM public."user_data"`,
-//   (err: any, res: any) => {
-//     let users = res.rows
-//     console.log(typeof users)
-//     users.map((user: any) => {
-//       if (user.user_email === 'kcasperson7@gmail.com') return
-//       console.log(user.user_email)
-//     })
-
-// err ? console.log(err.message) : console.log(res.rows)
-
-// portfolioTable.end
-//   }
-// )
-
 app.post('/api/signup', async (req: Request, res: any) => {
   try {
     const { user_email, user_password } = req.body
     const query = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
+
     const selectedUsers = `SELECT "user_email" FROM public."user_data"`
-    // map over selectedUsers?
-    console.log('selectedUsers', selectedUsers)
-    console.log('res', res.ServerResponse)
-    let users = res.body
-    users.map(async (user: any) => {
-      if (user_email !== selectedUsers) {
-        await portfolioTable.query(query, [user_email, user_password])
-        console.log(user_email, user_password)
-      } else {
-        res.send('User already exists, please signin')
-      }
-    })
+    const dbUsers = `SELECT "user_email" FROM public."user_data" WHERE "user_email" = 'kcasperson7@gmail.com'`
+    const databaseRes = await client.query(
+      `SELECT "user_email" FROM public."user_data" WHERE "user_email" = $1`,
+      [user_email]
+    )
+    if (databaseRes.rows.length > 0) {
+      console.log('user already exists')
+    } else {
+      //POST
+      console.log('add user')
+    }
   } catch (err) {
     console.error('Error logging in:', err)
     res.status(500).json({ error: 'Error logging in' })

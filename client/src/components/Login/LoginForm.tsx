@@ -41,7 +41,7 @@ console.log('login error', error)
         user_password: password
         
             })
-            console.log(response.data)
+            console.log('response',response.data)
               console.log(' email:', email, ' password:', password);
         
       console.log('signup email:', email, 'signup password:', password);
