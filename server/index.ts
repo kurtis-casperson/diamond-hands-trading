@@ -94,11 +94,11 @@ app.post('/api/trade', async (req: Request, res: Response) => {
   }
 })
 
-app.post('/api/signup', async (req: Request, res: any) => {
+app.post('/api/signup', async (req: Request, res: Response) => {
   try {
     const { user_email, user_password } = req.body
-    const query = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
 
+    const signupQuery = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
     const selectedUsers = `SELECT "user_email" FROM public."user_data"`
     const dbUsers = `SELECT "user_email" FROM public."user_data" WHERE "user_email" = 'kcasperson7@gmail.com'`
     const databaseRes = await client.query(
@@ -107,8 +107,11 @@ app.post('/api/signup', async (req: Request, res: any) => {
     )
     if (databaseRes.rows.length > 0) {
       console.log('user already exists')
+      // do i need to post info back to the front end?
+      // or just res.json?
+      res.json(databaseRes.rows.length)
     } else {
-      //POST
+      await client.query(signupQuery, [user_email, user_password])
       console.log('add user')
     }
   } catch (err) {
