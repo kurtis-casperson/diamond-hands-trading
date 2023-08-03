@@ -73,15 +73,6 @@ const client = new Client({
 
 client.connect()
 
-// portfolioTable.query(
-//   'SELECT * FROM public. "stock_portfolio"',
-//   (err: any, res: any) => {
-//     err ? console.log(err.message) : console.log(res)
-
-//     portfolioTable.end
-//   }
-// )
-
 app.post('/api/trade', async (req: Request, res: Response) => {
   try {
     const { company, symbol } = req.body
@@ -107,24 +98,29 @@ app.post('/api/signup', async (req: Request, res: Response) => {
     if (databaseRes.rows.length > 0) {
       res.status(501).json({ error: 'User already exists' })
     } else {
-      res.status(200)
+      res.status(201).json({ message: 'Successfully Registered', status: 201 })
       await client.query(signupQuery, [user_email, user_password])
-      console.log('add user')
     }
   } catch (err) {
     console.log(err)
   }
 })
 
-// this will check and authenticate
-// app.post('/api/login', async (req: Request, res: Response) => {
-//   try {
-//     const { user_email, user_password } = req.body
-//     const query = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
-//     await portfolioTable.query(query, [user_email, user_password])
-//     console.log(user_email, user_password)
-//   } catch (err) {
-//     console.error('Error logging in:', err)
-//     res.status(500).json({ error: 'Error logging in' })
-//   }
-// })
+app.post('/api/login', async (req: Request, res: Response) => {
+  try {
+    const { user_email } = req.body
+    console.log(user_email)
+    const databaseRes = await client.query(
+      `SELECT "user_email" FROM public."user_data" WHERE "user_email" = $1`,
+      [user_email]
+    )
+
+    if (databaseRes.rows.length === 0) {
+      res.status(501).json({ error: 'user does NOT exist' })
+    } else {
+      res.status(201).json({ message: 'Successfully Logged In', status: 201 })
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
