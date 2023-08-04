@@ -25,7 +25,7 @@ const LoginButton = ({email,password }: Props) => {
   
       })
       
-      if(response.status === 200){
+      if(response.status === 201){
         // redirect to homepage 
         alert('success')
       }

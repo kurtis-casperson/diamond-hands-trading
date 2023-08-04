@@ -98,7 +98,7 @@ app.post('/api/signup', async (req: Request, res: Response) => {
     if (databaseRes.rows.length > 0) {
       res.status(501).json({ error: 'User already exists' })
     } else {
-      res.status(201).json({ message: 'Successfully Registered', status: 201 })
+      res.status(201).json({ message: 'Successfully Registered' })
       await client.query(signupQuery, [user_email, user_password])
     }
   } catch (err) {
@@ -118,7 +118,7 @@ app.post('/api/login', async (req: Request, res: Response) => {
     if (databaseRes.rows.length === 0) {
       res.status(501).json({ error: 'user does NOT exist' })
     } else {
-      res.status(201).json({ message: 'Successfully Logged In', status: 201 })
+      res.status(201).json({ message: 'Successfully Logged In' })
     }
   } catch (err) {
     console.log(err)

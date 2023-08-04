@@ -21,7 +21,7 @@ const SignupButton = ({email,password }: Props) => {
           user_password: password
           
         })
-        if(response.status === 200){
+        if(response.status === 201){
           // redirect to homepage 
           alert('success, you signed up successfully')
         }
