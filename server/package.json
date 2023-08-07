@@ -7,7 +7,7 @@
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "nodemon index.ts"
+    "startServer": "nodemon index.ts"
   },
   "dependencies": {
     "axios": "^1.4.0",
@@ -15,6 +15,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "finnhub": "^1.2.17",
+    "jsonwebtoken": "^9.0.1",
     "pg": "^8.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

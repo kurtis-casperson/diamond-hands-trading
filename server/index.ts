@@ -7,6 +7,7 @@ const app: Express = express()
 const PORT: number = 4321
 const cors = require('cors')
 const path = require('path')
+const jwt = require('jsonwebtoken')
 require('dotenv').config()
 dotenv.config()
 app.use(express.json())
@@ -119,6 +120,8 @@ app.post('/api/login', async (req: Request, res: Response) => {
       res.status(501).json({ error: 'user does NOT exist' })
     } else {
       res.status(201).json({ message: 'Successfully Logged In' })
+      const accessToken = jwt.sign(user_email, process.env.ACCESS_TOKEN)
+      res.json({ accessToken: accessToken })
     }
   } catch (err) {
     console.log(err)
