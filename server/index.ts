@@ -110,7 +110,7 @@ app.post('/api/signup', async (req: Request, res: Response) => {
 app.post('/api/login', async (req: Request, res: Response) => {
   try {
     const { user_email } = req.body
-    console.log(user_email)
+
     const databaseRes = await client.query(
       `SELECT "user_email" FROM public."user_data" WHERE "user_email" = $1`,
       [user_email]
@@ -119,9 +119,10 @@ app.post('/api/login', async (req: Request, res: Response) => {
     if (databaseRes.rows.length === 0) {
       res.status(501).json({ error: 'user does NOT exist' })
     } else {
-      res.status(201).json({ message: 'Successfully Logged In' })
-      const accessToken = jwt.sign(user_email, process.env.ACCESS_TOKEN)
-      res.json({ accessToken: accessToken })
+      const id = databaseRes.rows[0].user_email
+      console.log(id)
+      const token = jwt.sign({ id }, process.env.ACCESS_TOKEN)
+      return res.json({ Login: true, token, databaseRes })
     }
   } catch (err) {
     console.log(err)
