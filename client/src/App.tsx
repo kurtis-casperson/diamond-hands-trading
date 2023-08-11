@@ -10,16 +10,18 @@ import './App.css'
 
 function App() {
 
-
+// I want to conditionally render the nav bar to only show on pages that are 
+// not the login page
+// or just easier to return on each page?
   return (
     <>
     <div >
       <NavBar />
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/Home" element={<HomePage />} />
         <Route path="/Trade" element={<TradePage />} />
-        <Route path="/Login" element={<Login />} />
         <Route path="/Portfolio" element={<Portfolio />} />
       </Routes>
     </div>
