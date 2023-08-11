@@ -109,11 +109,11 @@ app.post('/api/signup', async (req: Request, res: Response) => {
 
 app.post('/api/login', async (req: Request, res: Response) => {
   try {
-    const { user_email } = req.body
+    const { user_email, user_password } = req.body
 
     const databaseRes = await client.query(
-      `SELECT "user_email" FROM public."user_data" WHERE "user_email" = $1`,
-      [user_email]
+      `SELECT * FROM public."user_data" WHERE "user_email" = $1 AND "user_password" = $2`,
+      [user_email, user_password]
     )
 
     if (databaseRes.rows.length === 0) {
