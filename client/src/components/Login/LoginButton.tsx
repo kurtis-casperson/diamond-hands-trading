@@ -1,5 +1,8 @@
 
 import axios from 'axios';
+import { Nav } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+
 
 type Props = {
     
@@ -11,29 +14,37 @@ type Props = {
 
 
 const LoginButton = ({email,password }: Props) => {
-   
-// TODO
-// check password against password in db
+  // TODO
+  // check password against password in db
   
-    const handleLogin = async (email: string, password: string, event: any) => {
-        event.preventDefault();
-        if(userValidation(email, password)){
-        try{
-      let response =  await axios.post('/api/login', {
-        user_email: email,
-        // user_password: password
-  
-      })
-      
-      if(response.status === 201){
-        // redirect to homepage 
-        alert('success')
+  const navigate = useNavigate(); 
+  const handleLogin = async (email: string, password: string, event: any) => {
+    event.preventDefault();
+    if(userValidation(email, password)){
+      try{
+        let response =  await axios.post('/api/login', {
+          user_email: email,
+          user_password: password
+          
+        })
+        console.log('status', response.status, 'Login', response.data.Login,'data', response.data )
+        if(response.status === 200 ){
+        navigate('/Trade');
+        
+      } if(response.status === 500){
+        alert('Please check your login details and try again!')
+
+      }
+      else{
+        alert('Please check your login details and try again!')
+        return false
       }
   
         }catch(error:any){
-            if(error.response.status === 501){
+          console.error(error)
+            if(error){
                 alert(`Hey you! you're new! please signup and try again`)
-              }
+            }
         }
       };
     }
