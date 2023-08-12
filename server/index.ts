@@ -57,11 +57,26 @@ app.get(
 
       res.json(data)
     } catch (error) {
-      console.error('error', error)
       res.status(500).json({ error: 'Internal server error' })
     }
   }
 )
+
+app.get('/api/marketNews', async (req: Request, res: Response) => {
+  try {
+    const response = await axios.get(
+      `https://finnhub.io/api/v1/news?category=general&token=${process.env.FINHUB_API_KEY}`
+    )
+
+    const startIndex = 0
+    const endIndex = 10
+    const rangeData = response.data.slice(startIndex, endIndex)
+
+    res.json(rangeData)
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
 
 const { Client } = require('pg')
 
@@ -79,7 +94,6 @@ app.post('/api/trade', async (req: Request, res: Response) => {
     const { company, symbol } = req.body
     const query = `INSERT INTO public."stock_portfolio" ( "company","symbol") VALUES ($1, $2)`
     await client.query(query, [company, symbol])
-    console.log('tradeVariables', company, symbol)
   } catch (err) {
     console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error inserting data' })
@@ -115,16 +129,22 @@ app.post('/api/login', async (req: Request, res: Response) => {
       `SELECT * FROM public."user_data" WHERE "user_email" = $1 AND "user_password" = $2`,
       [user_email, user_password]
     )
-
+    // console.log('databaseRes', databaseRes)
+    // console.log(databaseRes.rows[0].user_password)
+    // if wrong password then should console error or undefined
+    // if (databaseRes.rows[0].user_password !== user_password) {
+    //   res.status(500).json({ error: 'Password is incorrect' })
+    // }
     if (databaseRes.rows.length === 0) {
       res.status(501).json({ error: 'user does NOT exist' })
     } else {
       const id = databaseRes.rows[0].user_email
-      console.log(id)
       const token = jwt.sign({ id }, process.env.ACCESS_TOKEN)
-      return res.json({ Login: true, token, databaseRes })
+      console.log(token)
+      return res.json({ token })
     }
   } catch (err) {
+    // send error 500
     console.log(err)
   }
 })
