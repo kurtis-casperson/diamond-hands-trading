@@ -14,11 +14,10 @@ type Props = {
 
 
 const LoginButton = ({email,password }: Props) => {
-  // TODO
-  // check password against password in db
   
   const navigate = useNavigate(); 
   const handleLogin = async (email: string, password: string, event: any) => {
+  
     event.preventDefault();
     if(userValidation(email, password)){
       try{
@@ -27,23 +26,14 @@ const LoginButton = ({email,password }: Props) => {
           user_password: password
           
         })
-        console.log('status', response.status, 'Login', response.data.Login,'data', response.data )
-        if(response.status === 200 ){
-        navigate('/Trade');
+        if(response.status == 200 ){
+        navigate('/Home');
         
-      } if(response.status === 500){
-        alert('Please check your login details and try again!')
-
-      }
-      else{
-        alert('Please check your login details and try again!')
-        return false
-      }
-  
+      } 
         }catch(error:any){
           console.error(error)
             if(error){
-                alert(`Hey you! you're new! please signup and try again`)
+                alert(`Oops.. check your login details, or singup to create an account`)
             }
         }
       };
