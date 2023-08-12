@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     
@@ -11,7 +12,8 @@ type Props = {
 
 
 const SignupButton = ({email,password }: Props) => {
-   
+  const navigate = useNavigate(); 
+  
     const handleSignup = async (email: string, password: string, event: any) => {
       event.preventDefault();
       if(userValidation(email, password)){
@@ -22,8 +24,8 @@ const SignupButton = ({email,password }: Props) => {
           
         })
         if(response.status === 201){
-          // redirect to homepage 
           alert('success, you signed up successfully')
+          navigate('/Home');
         }
        
       } catch(error: any){
