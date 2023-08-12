@@ -27,7 +27,7 @@ const NavBar = () => {
               }}
             >
               <Nav.Item>
-                <Nav.Link href="/">
+                <Nav.Link href="/Home">
                   <Gem className=" text-[#48ec5b] h-6 w-auto lg:block" />
                 </Nav.Link>
               </Nav.Item>
@@ -42,18 +42,22 @@ const NavBar = () => {
                 marginTop: '10px',
               }}
             >
-              <Button
+                  <Nav.Item>
+                <Nav.Link id="logout" href="/">Logout</Nav.Link>
+              </Nav.Item>
+              {/* <Button
                 type="button"
                 className="app-theme-button"
                 
                 size="sm"
               >
+               */}
                 {/* {theme === 'dark' ? (
                   <Sun className="bi bi-brightness-high"></Sun>
                 ) : (
                   <MoonFill className="bi bi-moon-fill"></MoonFill>
                 )} */}
-              </Button>
+              {/* </Button> */}
             </div>
           </Nav>
         </Navbar.Collapse>
