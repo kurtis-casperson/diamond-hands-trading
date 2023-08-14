@@ -2,19 +2,22 @@
 import axios from 'axios';
 import { Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
+import { useState } from 'react';
 
 type Props = {
     
     email: string;
     password: string
-  
+    login: (jwt_token: string) => void;
+    logout: () => void;
 }
 
 
 
-const LoginButton = ({email,password }: Props) => {
-  
+
+const LoginButton = ({email,password, login, logout }: Props) => {
+const [jwtToken, setJwtToken] = useState('')
+
   const navigate = useNavigate(); 
   const handleLogin = async (email: string, password: string, event: any) => {
   
@@ -26,7 +29,11 @@ const LoginButton = ({email,password }: Props) => {
           user_password: password
           
         })
+        setJwtToken(response.data.token)
+      ;
+      console.log('loginToken', jwtToken)
         if(response.status == 200 ){
+          // check that JWT is in local storage after successful login
         navigate('/Home');
         
       } 
@@ -65,12 +72,12 @@ const LoginButton = ({email,password }: Props) => {
   }
        
   
-
+  
 return(
 
     <button
     className="bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring mr-4"
-    onClick={(event) => handleLogin(email, password, event)}
+    onClick={(event) => {handleLogin(email, password, event);login(jwtToken) }}
   >
     Login
   </button>

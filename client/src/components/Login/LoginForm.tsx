@@ -8,11 +8,13 @@ type Props = {
     setEmail: (value: string) => void;
     password: string
     setPassword: (value: string) => void;
+    login: (jwt_token: string) => void;
+    logout: () => void;
 }
 
 // Need to add an ID to each user when added to DB... is this done on server
 
-const LoginForm = ({email,setEmail,password,setPassword }: Props) => {
+const LoginForm = ({email,setEmail,password,setPassword, login, logout }: Props) => {
    
 
   function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -53,7 +55,7 @@ return(
     />
   </div>
   <div className="flex justify-center">
-  {<LoginButton email={email} password={password}/>}
+  {<LoginButton email={email} password={password} login={login} logout={logout} />}
  
   {<SignupButton email={email} password={password}/>}
   </div>
