@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import StockTableHeader from "../TableComponents/StockTableHeader";
-import StockDataMethods from "../utils/SearchStockMethods"
+import {searchStock} from "../utils/SearchStockMethods"
 
 
 type Props = {
@@ -14,14 +14,13 @@ type Props = {
 const SearchBar = ({setSearchQuery,searchQuery, stockResultData, setStockResultData }: Props ) => {
 
 
-const getStock = new StockDataMethods()
 
 const handleInputSearch = (e: any) => {
     setSearchQuery(e.target.value)
     }
     
-const fetchData =  async () => {
-const stockName = await getStock.searchStock(searchQuery)
+const fetchStockNames =  async () => {
+const stockName = await searchStock(searchQuery)
   setStockResultData(stockName)
 }
 
@@ -35,7 +34,7 @@ const stockName = await getStock.searchStock(searchQuery)
       onChange={handleInputSearch}></input>
   <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-2 rounded-full"
   onClick={() => {
-    fetchData()
+    fetchStockNames()
     setSearchQuery('')
   }}
   >
