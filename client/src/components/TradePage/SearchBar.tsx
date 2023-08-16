@@ -1,7 +1,9 @@
 
 import { useState } from "react";
 import StockTableHeader from "../TableComponents/StockTableHeader";
-import axios from "axios";
+import StockDataMethods from "../utils/SearchStockMethods"
+
+
 type Props = {
   searchQuery: string
     setSearchQuery: (value: string) => void
@@ -11,22 +13,16 @@ type Props = {
 
 const SearchBar = ({setSearchQuery,searchQuery, stockResultData, setStockResultData }: Props ) => {
 
+
+const getStock = new StockDataMethods()
+
 const handleInputSearch = (e: any) => {
     setSearchQuery(e.target.value)
     }
     
 const fetchData =  async () => {
-
-    try {
-        const response = await axios.get(`/api/stock/search/${searchQuery}`)
-        setStockResultData(response.data)
-        console.log( 'response',response)
-      } catch (error) {
-  
-        console.error(error)
-      }
-
-
+const stockName = await getStock.searchStock(searchQuery)
+  setStockResultData(stockName)
 }
 
 
