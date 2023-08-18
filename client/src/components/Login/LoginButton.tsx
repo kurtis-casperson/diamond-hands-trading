@@ -9,10 +9,10 @@ type Props = {
     email: string;
     password: string
     jwtLogin: (jwt_token: string) => void;
-    logout: () => void;
+    
 }
 
-const LoginButton = ({email,password, jwtLogin, logout }: Props) => {
+const LoginButton = ({email,password, jwtLogin}: Props) => {
 
 
   const navigate = useNavigate(); 
@@ -30,7 +30,7 @@ const LoginButton = ({email,password, jwtLogin, logout }: Props) => {
         jwtLogin(response.data.token)
     
         if(response.status == 200 ){
-          // check that JWT is in local storage after successful login
+
         navigate('/Home');
         
       } 

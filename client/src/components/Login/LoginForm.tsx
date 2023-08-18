@@ -3,18 +3,18 @@ import LoginButton from './LoginButton';
 
 
 type Props = {
-    // EventHandler:  React.SyntheticEvent<any, Event> = (event: E) => void;
+   
     email: string;
     setEmail: (value: string) => void;
     password: string
     setPassword: (value: string) => void;
-    login: (jwt_token: string) => void;
-    logout: () => void;
+    jwtLogin: (jwt_token: string) => void;
+   
 }
 
 // Need to add an ID to each user when added to DB... is this done on server
 
-const LoginForm = ({email,setEmail,password,setPassword, login, logout }: Props) => {
+const LoginForm = ({email,setEmail,password,setPassword, jwtLogin}: Props) => {
    
 
   function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -55,7 +55,7 @@ return(
     />
   </div>
   <div className="flex justify-center">
-  {<LoginButton email={email} password={password} login={login} logout={logout} />}
+  {<LoginButton email={email} password={password} jwtLogin={jwtLogin}  />}
  
   {<SignupButton email={email} password={password}/>}
   </div>

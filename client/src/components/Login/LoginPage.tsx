@@ -6,21 +6,21 @@ import Cookies from "universal-cookie"
 import jwt from "jwt-decode"
 
 
+type Props = {
+
+  setUser: (value: null) => void
+}
 
 
-const LoginPage = () => {
+const LoginPage = ({ setUser}: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null)
+  
 // initialize cookies package
   const cookies = new Cookies();
 
-const logout = () => {
-setUser(null);
-cookies.remove("jwt_authorization");
-}
 
-const login = (jwt_token: string) => {
+const jwtLogin = (jwt_token: string) => {
 
 // decode the token
 const decoded: any = jwt(jwt_token)
@@ -39,9 +39,10 @@ cookies.set("jwt_authorization", jwt_token, {
 
   return (
     <>
+    
     <div className="flex justify-center items-center h-screen bg-green-500">
     <h2 className="text-2xl font-bold text-center text-black">Diamond Hand Trading</h2>
-    <LoginForm email={email} setEmail={setEmail} password={password} setPassword={setPassword} login={login} logout={logout} />
+    <LoginForm email={email} setEmail={setEmail} password={password} setPassword={setPassword} jwtLogin={jwtLogin} />
     </div>
     </>
   );
