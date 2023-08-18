@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import FocusRefComponent from './focusRefComponent';
+// import FocusRefComponent from './focusRefComponent';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
+import {fetchStockPrice} from '../../utils/SearchStockMethods'
 
 type Props = {
   
@@ -17,28 +18,33 @@ const TradeModal = ({stockSymbol, stockName, portfolioValue, setPortfolioValue }
   // how to pass portfolioValue into the modal? is Portoflio a child of TradeModal?
   // const [portfolioValue, setPortfolioValue] = useState(100000)
   const [show, setShow] = useState(false);
-const [stockPrice, setStockPrice] = useState<number>();
-const [numberShares, setNumberShares] = useState<number>()
+  const [stockPrice, setStockPrice] = useState<number>();
+  const [numberShares, setNumberShares] = useState<number>()
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   let purchaseValue: number;
-// when the the modal is shown the price is shown of the stock
-// and portfolio value 
-// get current price of the stock
-// create a table with all of the stock inputs for buy and sell
 
-const fetchData =  async (stockSymbol: string, handleShow: any) => {
 
-    try {
-        const response = await axios.get(`/api/stock/price/${stockSymbol}`)
-        setStockPrice(response.data)
-        handleShow()
-        console.log( 'response',response)
-      } catch (error) {
-        console.error(error)
-      }
 
-}
+  const getStockPrice =  async () => {
+
+   const getStockPrice = await fetchStockPrice(stockSymbol)
+   setStockPrice(getStockPrice)
+   handleShow()
+
+  }
+// const fetchData =  async (stockSymbol: string, handleShow: any) => {
+
+//     try {
+//         const response = await axios.get(`/api/stock/price/${stockSymbol}`)
+//         setStockPrice(response.data)
+//         handleShow()
+       
+//       } catch (error) {
+//         console.error(error)
+//       }
+
+// }
 
 
 const shareValue = (stockPrice:number, numberShares: number ) => {
@@ -52,15 +58,15 @@ const handleInputNumberShares = (e: any) => {
   }
   // shareValue:(stockPrice:number, numberShares: number) => void,
   const submitTrade = async (stockSymbol: string, stockName: string   ) => {
-
+debugger
   try{ 
 
 let response = await axios.post('/api/trade', {
-  name: stockName,
+  // user: ${userID},
+  company: stockName,
   symbol: stockSymbol
 })
-
-    console.log(response.data)
+response
   } catch (error) {
     console.error(error);
    
@@ -69,7 +75,7 @@ let response = await axios.post('/api/trade', {
   }
   return (
     <>
-    <button className="bg-green-400 hover:bg-green-500 font-bold py-1 px-1 rounded-full " onClick={()=>{fetchData(stockSymbol, handleShow)}} >
+    <button className="bg-green-400 hover:bg-green-500 font-bold py-1 px-1 rounded-full " onClick={()=>{getStockPrice()}} >
     Trade {stockSymbol}
     </button>
 
@@ -107,7 +113,7 @@ let response = await axios.post('/api/trade', {
               onChange={handleInputNumberShares}
             ></input>
          
-      <FocusRefComponent shareValue={shareValue}/>
+      {/* <FocusRefComponent shareValue={shareValue}/> */}
     </div>
    
         </Modal.Body>
