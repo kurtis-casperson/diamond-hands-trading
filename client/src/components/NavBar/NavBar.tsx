@@ -70,7 +70,10 @@ const NavBar = ({ user, setUser}: Props) => {
                 onClick={() =>  jwtLogout() }
                 size="sm"
               >
-                <Nav.Link id="logout" href="/">Logout</Nav.Link>
+               {user ? <Nav.Link id="logout" href="/"> Logout</Nav.Link>
+               :
+               <Nav.Link id="logout" href="/"> Login</Nav.Link>
+            }
                 </Button>
               </Nav.Item>
 
