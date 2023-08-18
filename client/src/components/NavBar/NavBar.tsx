@@ -1,8 +1,28 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap'
 import { Gem } from 'react-bootstrap-icons'
+import Cookies from "universal-cookie"
 
 import './NavBar.css'
-const NavBar = () => {
+
+
+type Props = {
+  jwtLogout: () => void
+  user: null
+  setUser: (value: null) => void
+}
+
+
+
+const NavBar = ({ user, setUser}: Props) => {
+
+  const cookies = new Cookies();
+
+  const jwtLogout = () => {
+    setUser(null);
+    cookies.remove("jwt_authorization");
+    }
+
+
   return (
     <Navbar
       collapseOnSelect
@@ -42,9 +62,18 @@ const NavBar = () => {
                 marginTop: '10px',
               }}
             >
+             
                   <Nav.Item>
+                  <Button
+                type="button"
+               
+                onClick={() =>  jwtLogout() }
+                size="sm"
+              >
                 <Nav.Link id="logout" href="/">Logout</Nav.Link>
+                </Button>
               </Nav.Item>
+
               {/* <Button
                 type="button"
                 className="app-theme-button"
