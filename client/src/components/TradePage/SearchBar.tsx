@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import StockTableHeader from "../TableComponents/StockTableHeader";
-import {searchStock} from "../utils/SearchStockMethods"
+import {searchStock} from "../../utils/SearchStockMethods"
 
 
 type Props = {
