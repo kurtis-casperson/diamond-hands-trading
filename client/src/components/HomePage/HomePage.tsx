@@ -38,7 +38,7 @@ const HomePage = () => {
   return (
     <>
     <div>HomePage</div>
-    <div id="newsTable">{marketNewsTable}</div>
+    <div id="newsTable" className='grid lg:grid-cols-4 gap-10 p-6 text-left '>{marketNewsTable}</div>
     </>
   )
 }
