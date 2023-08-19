@@ -69,7 +69,7 @@ app.get('/api/marketNews', async (req: Request, res: Response) => {
     )
 
     const startIndex = 0
-    const endIndex = 10
+    const endIndex = 4
     const rangeData = response.data.slice(startIndex, endIndex)
 
     res.json(rangeData)
@@ -92,7 +92,9 @@ client.connect()
 app.post('/api/trade', async (req: Request, res: Response) => {
   try {
     const { company, symbol } = req.body
-    const query = `INSERT INTO public."stock_portfolio" ( "company","symbol") VALUES ($1, $2)`
+    const query = `
+    INSERT INTO public."stock_portfolio" ( "company","symbol") VALUES ($1, $2)
+      RETURNING *`
     await client.query(query, [company, symbol])
   } catch (err) {
     console.error('Error inserting data:', err)
@@ -126,21 +128,18 @@ app.post('/api/login', async (req: Request, res: Response) => {
     const { user_email, user_password } = req.body
 
     const databaseRes = await client.query(
-      `SELECT * FROM public."user_data" WHERE "user_email" = $1 AND "user_password" = $2`,
+      `SELECT * FROM public."user_data" 
+        WHERE "user_email" = $1 AND "user_password" = $2 `,
       [user_email, user_password]
     )
-    // console.log('databaseRes', databaseRes)
-    // console.log(databaseRes.rows[0].user_password)
-    // if wrong password then should console error or undefined
-    // if (databaseRes.rows[0].user_password !== user_password) {
-    //   res.status(500).json({ error: 'Password is incorrect' })
-    // }
+
     if (databaseRes.rows.length === 0) {
       res.status(501).json({ error: 'user does NOT exist' })
     } else {
-      const id = databaseRes.rows[0].user_email
-      const token = jwt.sign({ id }, process.env.ACCESS_TOKEN)
-      console.log(token)
+      const userEmail = databaseRes.rows[0].user_email
+      // const userID = databaseRes.rows[0].user_id
+      const token = jwt.sign({ userEmail }, process.env.ACCESS_TOKEN)
+
       return res.json({ token })
     }
   } catch (err) {
