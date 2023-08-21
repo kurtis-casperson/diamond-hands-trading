@@ -4,8 +4,10 @@ import TradePage from './components/TradePage/TradePage'
 import Login from './components/Login/LoginPage'
 import Portfolio from './components/Portfolio/Portfolio'
 import { Route, Routes } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, createContext } from 'react'
 import './App.css'
+
+export const jwtContext = createContext()
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login setUser={setUser}/>} />
         <Route path="/Home" element={<HomePage />} />
-        <Route path="/Trade" element={<TradePage />} />
+        <Route path="/Trade" element={<TradePage user={user}/>} />
         <Route path="/Portfolio" element={<Portfolio />} />
       </Routes>
     </div>
