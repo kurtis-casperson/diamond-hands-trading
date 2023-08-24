@@ -3,6 +3,7 @@ import SearchBar from './SearchBar'
 import StockTableHeader from '../TableComponents/StockTableHeader'
 
 
+
 const TradePage: FC = () => {
 const [searchQuery, setSearchQuery] = useState<string>('')
 const [stockResultData, setStockResultData] = useState([])
@@ -19,11 +20,10 @@ const [portfolioValue, setPortfolioValue] = useState(100000)
       setStockResultData={setStockResultData}
       />
       <StockTableHeader
- stockResultData={stockResultData}
- portfolioValue={portfolioValue}
- setPortfolioValue={setPortfolioValue}
-
-/>
+     stockResultData={stockResultData}
+     portfolioValue={portfolioValue}
+     setPortfolioValue={setPortfolioValue}
+        />
         
 </>
     )
