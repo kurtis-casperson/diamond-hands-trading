@@ -12,12 +12,10 @@ export const jwtContext = createContext()
 
 function App() {
   const [user, setUser] = useState(null)
-// I want to conditionally render the nav bar to only show on pages that are 
-// not the login page
-// or just easier to return on each page?
+
   return (
     <>
-    <div >
+    <jwtContext.Provider value={user} >
       <NavBar user={user} setUser={setUser} />
 
       <Routes>
@@ -26,7 +24,7 @@ function App() {
         <Route path="/Trade" element={<TradePage user={user}/>} />
         <Route path="/Portfolio" element={<Portfolio />} />
       </Routes>
-    </div>
+    </jwtContext.Provider>
   </>
   )
 }
