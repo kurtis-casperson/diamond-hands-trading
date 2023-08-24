@@ -137,9 +137,9 @@ app.post('/api/login', async (req: Request, res: Response) => {
       res.status(501).json({ error: 'user does NOT exist' })
     } else {
       const userEmail = databaseRes.rows[0].user_email
-      // const userID = databaseRes.rows[0].user_id
-      const token = jwt.sign({ userEmail }, process.env.ACCESS_TOKEN)
-
+      const userID = databaseRes.rows[0].user_id
+      const token = jwt.sign({ userEmail, userID }, process.env.ACCESS_TOKEN)
+      console.log(userID)
       return res.json({ token })
     }
   } catch (err) {
