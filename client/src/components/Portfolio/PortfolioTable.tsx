@@ -18,7 +18,7 @@ const PortfolioTable = ({tableData, setTableData }: Props) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/data'); // Replace with your API endpoint
+      const response = await fetch('/api/data'); 
       const jsonData = await response.json();
       setTableData(jsonData);
     } catch (error) {
@@ -39,17 +39,6 @@ const PortfolioTable = ({tableData, setTableData }: Props) => {
           </tr>
         </thead>
 
-        {/* <tbody>
-        {tableData.map((stock, index) => (
-          <tr key={index}>
-            <td>{stock.company}</td>
-            <td>{stock.symbol}</td>
-           <td>
-           
-            </td>
-          </tr>
-        ))}
-        </tbody> */}
       </Table>
     </>
   )
