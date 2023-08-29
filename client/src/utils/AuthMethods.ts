@@ -1,12 +1,13 @@
 import axios from 'axios'
 
-const login = async (email: string, password: string) => {
+const login = async (email: string, password: string, jwtLogin: any) => {
   try {
     let response = await axios.post('/api/login', {
       user_email: email,
       user_password: password,
     })
-    return response.data.token
+    console.log(jwtLogin(response.data.token))
+    return jwtLogin(response.data.token)
   } catch (error) {
     console.error(error)
     if (error) {
