@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
+import { login } from '../../utils/AuthMethods';
 
 type Props = {
     
@@ -26,7 +26,9 @@ const LoginButton = ({email,password, jwtLogin}: Props) => {
           user_password: password
           
         })
-      
+      // console.log(response.data.token)
+      // login(email, password,jwtLogin )
+
         jwtLogin(response.data.token)
     
         if(response.status == 200 ){
@@ -50,20 +52,20 @@ const LoginButton = ({email,password, jwtLogin}: Props) => {
     }
     if (email.includes(' ')) {
       return false
-      // {status: false, msg:'Please remove all spaces from the email' };
+    
     }
     if(!email.includes('@')) {
       console.log('error')
       return false
-      // {status: false, msg:'Please enter a standard email format' };
+     
     }
     if (!password) {
       return false
-      // {status: false, msg: 'Please provide a password'};
+    
     }
     if (password.includes(' ')) {
         return false
-        //  {status: false, msg: 'Please remove all spaces from the password' };
+      
       }
     return {status: true, msg: 'valid' };
   }
