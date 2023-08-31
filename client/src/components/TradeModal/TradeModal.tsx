@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 // import FocusRefComponent from './focusRefComponent';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 import {fetchStockPrice} from '../../utils/SearchStockMethods'
+// import { jwtContext } from '../../App';
+
 
 type Props = {
   
@@ -15,8 +17,8 @@ type Props = {
 
 
 const TradeModal = ({stockSymbol, stockName, portfolioValue, setPortfolioValue }: Props,  ) => {
-  // how to pass portfolioValue into the modal? is Portoflio a child of TradeModal?
-  // const [portfolioValue, setPortfolioValue] = useState(100000)
+  const userId = useContext(jwtContext)
+  console.log('userId', userId)
   const [show, setShow] = useState(false);
   const [stockPrice, setStockPrice] = useState<number>();
   const [numberShares, setNumberShares] = useState<number>()
@@ -62,7 +64,7 @@ debugger
   try{ 
 
 let response = await axios.post('/api/trade', {
-  // user: ${userID},
+  userId,
   company: stockName,
   symbol: stockSymbol
 })

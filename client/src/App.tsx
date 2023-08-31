@@ -3,19 +3,21 @@ import HomePage from './components/HomePage/HomePage'
 import TradePage from './components/TradePage/TradePage'
 import Login from './components/Login/LoginPage'
 import Portfolio from './components/Portfolio/Portfolio'
+// import { UserContextType, jwtUserContext } from '../src/utils/userContextMethods'
 import { Route, Routes } from 'react-router-dom'
-import { useState, createContext } from 'react'
+import { useState, useContext } from 'react'
 import './App.css'
-
-export const jwtContext = createContext()
 
 
 function App() {
-  const [user, setUser] = useState(null)
+  // trying to replace this state with context
+  // should createContext and useState have the same default values?
+const [user, setUser] = useState(null)
+// const userfunc = (user: UserContextType) => {}
 
   return (
     <>
-    <jwtContext.Provider value={user} >
+    {/* <jwtUserContext.Provider value={user} > */}
       <NavBar user={user} setUser={setUser} />
 
       <Routes>
@@ -24,7 +26,7 @@ function App() {
         <Route path="/Trade" element={<TradePage user={user}/>} />
         <Route path="/Portfolio" element={<Portfolio />} />
       </Routes>
-    </jwtContext.Provider>
+    {/* </jwtUserContext.Provider> */}
   </>
   )
 }

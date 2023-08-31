@@ -24,7 +24,7 @@ const SignupButton = ({email,password }: Props) => {
           
         })
         if(response.status === 201){
-          alert('success, you signed up successfully')
+          alert('you signed up successfully')
           navigate('/Home');
         }
        
