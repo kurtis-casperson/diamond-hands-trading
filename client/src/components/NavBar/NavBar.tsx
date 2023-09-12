@@ -1,24 +1,27 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap'
 import { Gem } from 'react-bootstrap-icons'
 import Cookies from "universal-cookie"
-
+import { useState, useContext } from 'react'
+import { UserContextType, UserContext } from '../../utils/UserContextMethods'
 import './NavBar.css'
 
 
-type Props = {
-  jwtLogout: () => void
-  user: null
-  setUser: (value: null) => void
-}
+// type Props = {
+//   jwtLogout: () => void
+//   // user: null
+//   // setUser: (value: null) => void
+// }
 
 
 
-const NavBar = ({ user, setUser}: Props) => {
-
+const NavBar = () => {
+  const [user, setUser] = useState<UserContextType>()
   const cookies = new Cookies();
 
   const jwtLogout = () => {
-    setUser(null);
+    setUser({email: "",
+            password: "",
+            id: 0});
     cookies.remove("jwt_authorization");
     }
 
