@@ -6,10 +6,10 @@ export type UserContextType = {
   id: number
 }
 
-const jwtUserContext = createContext<UserContextType>({
+const UserContext = createContext<UserContextType | null>({
   email: '',
   password: '',
   id: 0,
 })
 
-export { jwtUserContext }
+export { UserContext }
