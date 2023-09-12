@@ -4,15 +4,12 @@ import './Login.css';
 import LoginForm from './LoginForm'
 import Cookies from "universal-cookie"
 import jwt from "jwt-decode"
+import { UserContextType } from '../../utils/UserContextMethods';
 
 
-type Props = {
+const LoginPage = () => {
+  const [user, setUser] = useState<UserContextType>()
 
-  setUser: (value: null) => void
-}
-
-
-const LoginPage = ({ setUser}: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
