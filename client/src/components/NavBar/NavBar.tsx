@@ -15,7 +15,7 @@ import './NavBar.css'
 
 
 const NavBar = () => {
-  const [user, setUser] = useState<UserContextType>()
+  const [user, setUser] = useState(useContext(UserContext))
   const cookies = new Cookies();
 
   const jwtLogout = () => {
@@ -25,7 +25,7 @@ const NavBar = () => {
     cookies.remove("jwt_authorization");
     }
 
-
+console.log('navuser', user)
   return (
     <Navbar
       collapseOnSelect
@@ -73,9 +73,9 @@ const NavBar = () => {
                 onClick={() =>  jwtLogout() }
                 size="sm"
               >
-               {user ? <Nav.Link id="logout" href="/"> Logout</Nav.Link>
+               {user?.email !== null ? <Nav.Link id="login" href="/">Login</Nav.Link>
                :
-               <Nav.Link id="logout" href="/"> Login</Nav.Link>
+               <Nav.Link id="logout" href="/">Logout</Nav.Link>
             }
                 </Button>
               </Nav.Item>

@@ -12,8 +12,9 @@ import './App.css'
 function App() {
   // trying to replace this state with context
   // should createContext and useState have the same default values?
-// const [user, setUser] = useState(null)
-// const userfunc = (user: UserContextType) => {}
+
+// const [user, setUser] = useState(useContext(UserContext))
+{/* <UserContext.Provider value={user} > */}
 
   return (
     <>

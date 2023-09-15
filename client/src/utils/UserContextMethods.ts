@@ -6,10 +6,6 @@ export type UserContextType = {
   id: number
 }
 
-const UserContext = createContext<UserContextType | null>({
-  email: '',
-  password: '',
-  id: 0,
-})
+const UserContext = createContext<UserContextType | null>(null)
 
 export { UserContext }
