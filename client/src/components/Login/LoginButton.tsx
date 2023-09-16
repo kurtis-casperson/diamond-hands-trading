@@ -17,6 +17,7 @@ const LoginButton = ({ email, password, jwtLogin, user }: Props) => {
 
   const navigate = useNavigate()
 
+  useEffect(() => {}, [])
   const handleLogin = async (email: string, password: string, event: any) => {
     event.preventDefault()
     if (userValidation(email, password)) {
@@ -28,13 +29,11 @@ const LoginButton = ({ email, password, jwtLogin, user }: Props) => {
 
         jwtLogin(response.data.token)
 
-        useEffect(() => {
-          console.log('button effect', user)
+        console.log('button effect', user)
 
-          if (response.status == 200) {
-            navigate('/Home')
-          }
-        }, [])
+        if (response.status == 200) {
+          navigate('/Home')
+        }
       } catch (error: any) {
         console.error(error)
         if (error) {

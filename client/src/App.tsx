@@ -8,27 +8,28 @@ import { Route, Routes } from 'react-router-dom'
 import { useState, useContext } from 'react'
 import './App.css'
 
-
 function App() {
   // trying to replace this state with context
   // should createContext and useState have the same default values?
 
-// const [user, setUser] = useState(useContext(UserContext))
-{/* <UserContext.Provider value={user} > */}
+  const [user, setUser] = useState(useContext(UserContext))
+  {
+    /* <UserContext.Provider value={user} > */
+  }
 
   return (
     <>
-    <UserContext.Provider value={useContext(UserContext)} >
-      <NavBar />
+      <UserContext.Provider value={{ user, setUser }}>
+        <NavBar />
 
-      <Routes>
-        <Route path="/" element={<Login/>} />
-        <Route path="/Home" element={<HomePage />} />
-        <Route path="/Trade" element={<TradePage />} />
-        <Route path="/Portfolio" element={<Portfolio />} />
-      </Routes>
-    </UserContext.Provider>
-  </>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/Home" element={<HomePage />} />
+          <Route path="/Trade" element={<TradePage />} />
+          <Route path="/Portfolio" element={<Portfolio />} />
+        </Routes>
+      </UserContext.Provider>
+    </>
   )
 }
 

@@ -17,12 +17,12 @@ const LoginPage = () => {
   const cookies = new Cookies()
   console.log('LoginUser', user)
 
-  //     jwtLogin()
-
   const jwtLogin = (jwt_token: string) => {
+    console.log('jwtLoginError')
+
     // decode the token
     const decoded: any = jwt(jwt_token)
-
+    console.log('decoded', decoded)
     //set user state
     setUser(decoded)
 
