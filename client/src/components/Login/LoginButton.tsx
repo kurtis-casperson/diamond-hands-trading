@@ -12,8 +12,6 @@ type Props = {
 }
 
 const LoginButton = ({ email, password, jwtLogin }: Props) => {
-  // const [user, setUser] = useState(useContext(UserContext))
-
   const navigate = useNavigate()
 
   const handleLogin = async (email: string, password: string, event: any) => {
