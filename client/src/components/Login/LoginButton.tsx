@@ -9,15 +9,13 @@ type Props = {
   email: string
   password: string
   jwtLogin: (jwt_token: string) => void
-  user: any
 }
 
-const LoginButton = ({ email, password, jwtLogin, user }: Props) => {
+const LoginButton = ({ email, password, jwtLogin }: Props) => {
   // const [user, setUser] = useState(useContext(UserContext))
 
   const navigate = useNavigate()
 
-  useEffect(() => {}, [])
   const handleLogin = async (email: string, password: string, event: any) => {
     event.preventDefault()
     if (userValidation(email, password)) {
@@ -28,8 +26,6 @@ const LoginButton = ({ email, password, jwtLogin, user }: Props) => {
         })
 
         jwtLogin(response.data.token)
-
-        console.log('button effect', user)
 
         if (response.status == 200) {
           navigate('/Home')
