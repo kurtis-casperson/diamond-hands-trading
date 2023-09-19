@@ -2,7 +2,7 @@ import { Navbar, Nav, Container, Button } from 'react-bootstrap'
 import { Gem } from 'react-bootstrap-icons'
 import Cookies from 'universal-cookie'
 import { useState, useContext } from 'react'
-import { UserContextType, UserContext } from '../../utils/UserContextMethods'
+import { UserContext } from '../../utils/UserContextMethods'
 import './NavBar.css'
 
 const NavBar = () => {
@@ -42,6 +42,11 @@ const NavBar = () => {
               <Nav.Item>
                 <Nav.Link id="trade" href="/Trade">
                   Trade
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link id="portfolio" href="/Portfolio">
+                  Portfolio
                 </Nav.Link>
               </Nav.Item>
             </div>
