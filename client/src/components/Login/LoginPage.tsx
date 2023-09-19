@@ -2,27 +2,23 @@ import './Login.css'
 import LoginForm from './LoginForm'
 import Cookies from 'universal-cookie'
 import jwt from 'jwt-decode'
-import { useState, useContext, useEffect } from 'react'
-import { UserContextType, UserContext } from '../../utils/UserContextMethods'
+import { useState, useContext } from 'react'
+import { UserContext } from '../../utils/UserContextMethods'
 
 const LoginPage = () => {
-  const [user, setUser] = useState(useContext(UserContext))
+  const userContext = useContext(UserContext)
+  const setUser = userContext?.setUser
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  // set up useeffect to watch user value
-
   // initialize cookies package
   const cookies = new Cookies()
-  console.log('LoginUser', user)
 
   const jwtLogin = (jwt_token: string) => {
-    console.log('jwtLoginError')
-
     // decode the token
     const decoded: any = jwt(jwt_token)
-    console.log('decoded', decoded)
+
     //set user state
     setUser(decoded)
 
@@ -31,10 +27,6 @@ const LoginPage = () => {
       expires: new Date(decoded.exp * 1000),
     })
   }
-
-  useEffect(() => {
-    console.log('login effect', user)
-  }, [user])
 
   return (
     <>
@@ -48,7 +40,6 @@ const LoginPage = () => {
           password={password}
           setPassword={setPassword}
           jwtLogin={jwtLogin}
-          user={user}
         />
       </div>
     </>
