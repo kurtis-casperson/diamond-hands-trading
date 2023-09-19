@@ -9,9 +9,11 @@ export type UserContext = {
 
 export type UserContextType = {
   user: UserContext | null
-  setUser: React.Dispatch<React.SetStateAction<UserContextType | null>>
+  setUser: React.Dispatch<React.SetStateAction<UserContext | null>>
 }
 
 const UserContext = createContext<UserContextType | null>(null)
+
+export const UserProvider = UserContext.Provider
 
 export { UserContext }
