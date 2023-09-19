@@ -1,38 +1,23 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap'
 import { Gem } from 'react-bootstrap-icons'
-import Cookies from "universal-cookie"
+import Cookies from 'universal-cookie'
 import { useState, useContext } from 'react'
 import { UserContextType, UserContext } from '../../utils/UserContextMethods'
 import './NavBar.css'
 
-
-// type Props = {
-//   jwtLogout: () => void
-//   // user: null
-//   // setUser: (value: null) => void
-// }
-
-
-
 const NavBar = () => {
-  const [user, setUser] = useState(useContext(UserContext))
-  const cookies = new Cookies();
+  const userContext = useContext(UserContext)
+  const user = userContext?.user
+  const setUser = userContext?.setUser
+  const cookies = new Cookies()
 
   const jwtLogout = () => {
-    setUser({email: "",
-            password: "",
-            id: 0});
-    cookies.remove("jwt_authorization");
-    }
+    setUser(null)
+    cookies.remove('jwt_authorization')
+  }
 
-console.log('navuser', user)
   return (
-    <Navbar
-      collapseOnSelect
-      expand="sm"
-      bg="*"
-      variant="dark"    
-    >
+    <Navbar collapseOnSelect expand="sm" bg="*" variant="dark">
       <Container className="navBarContainer">
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -55,9 +40,10 @@ console.log('navuser', user)
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link id="trade" href="/Trade">Trade</Nav.Link>
+                <Nav.Link id="trade" href="/Trade">
+                  Trade
+                </Nav.Link>
               </Nav.Item>
-             
             </div>
             <div
               className="ml-auto"
@@ -65,18 +51,17 @@ console.log('navuser', user)
                 marginTop: '10px',
               }}
             >
-             
-                  <Nav.Item>
-                  <Button
-                type="button"
-               
-                onClick={() =>  jwtLogout() }
-                size="sm"
-              >
-               {user?.email !== null ? <Nav.Link id="login" href="/">Login</Nav.Link>
-               :
-               <Nav.Link id="logout" href="/">Logout</Nav.Link>
-            }
+              <Nav.Item>
+                <Button type="button" onClick={() => jwtLogout()} size="sm">
+                  {user !== null ? (
+                    <Nav.Link id="login" href="/">
+                      Logout
+                    </Nav.Link>
+                  ) : (
+                    <Nav.Link id="logout" href="/">
+                      Login
+                    </Nav.Link>
+                  )}
                 </Button>
               </Nav.Item>
 
@@ -87,7 +72,7 @@ console.log('navuser', user)
                 size="sm"
               >
                */}
-                {/* {theme === 'dark' ? (
+              {/* {theme === 'dark' ? (
                   <Sun className="bi bi-brightness-high"></Sun>
                 ) : (
                   <MoonFill className="bi bi-moon-fill"></MoonFill>
