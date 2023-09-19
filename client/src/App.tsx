@@ -3,23 +3,22 @@ import HomePage from './components/HomePage/HomePage'
 import TradePage from './components/TradePage/TradePage'
 import Login from './components/Login/LoginPage'
 import Portfolio from './components/Portfolio/Portfolio'
-import { UserContextType, UserContext } from '../src/utils/UserContextMethods'
+import { UserContext, UserProvider } from '../src/utils/UserContextMethods'
 import { Route, Routes } from 'react-router-dom'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  // trying to replace this state with context
-  // should createContext and useState have the same default values?
+  const userContext = useContext(UserContext)
+  const [user, setUser] = useState(userContext ? userContext.user : null)
 
-  const [user, setUser] = useState(useContext(UserContext))
-  {
-    /* <UserContext.Provider value={user} > */
-  }
+  useEffect(() => {
+    console.log('user context effect', user)
+  }, [user])
 
   return (
     <>
-      <UserContext.Provider value={{ user, setUser }}>
+      <UserProvider value={{ user, setUser }}>
         <NavBar />
 
         <Routes>
@@ -28,7 +27,7 @@ function App() {
           <Route path="/Trade" element={<TradePage />} />
           <Route path="/Portfolio" element={<Portfolio />} />
         </Routes>
-      </UserContext.Provider>
+      </UserProvider>
     </>
   )
 }
