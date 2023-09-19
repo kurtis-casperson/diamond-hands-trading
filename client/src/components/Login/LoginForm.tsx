@@ -7,12 +7,7 @@ type Props = {
   password: string
   setPassword: (value: string) => void
   jwtLogin: (jwt_token: string) => void
-  user: any
 }
-
-// when I login the user object is still empty doesnt contain usr data
-// I think I need to change email and password pieces of state to UserContext type object
-// i thought setUser(decoded) in LoginPage would modify the state and change the context
 
 const LoginForm = ({
   email,
@@ -20,7 +15,6 @@ const LoginForm = ({
   password,
   setPassword,
   jwtLogin,
-  user,
 }: Props) => {
   function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
     setEmail(event.target.value)
@@ -68,7 +62,6 @@ const LoginForm = ({
               email={email}
               password={password}
               jwtLogin={jwtLogin}
-              user={user}
             />
           }
 
