@@ -91,11 +91,11 @@ client.connect()
 
 app.post('/api/trade', async (req: Request, res: Response) => {
   try {
-    const { company, symbol } = req.body
+    const { company, symbol, user } = req.body
     const query = `
-    INSERT INTO public."stock_portfolio" ( "company","symbol") VALUES ($1, $2)
+    INSERT INTO public."stock_portfolio" ( "company","symbol", "user_id") VALUES ($1, $2, $3)
       RETURNING *`
-    await client.query(query, [company, symbol])
+    await client.query(query, [company, symbol, user])
   } catch (err) {
     console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error inserting data' })

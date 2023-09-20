@@ -3,7 +3,7 @@ import { createContext } from 'react'
 export type UserContext = {
   email: string
   password: string
-  id: number
+  userID: number
   exp: number
 }
 
