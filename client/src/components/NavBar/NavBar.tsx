@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie'
 import { useState, useContext } from 'react'
 import { UserContext } from '../../utils/UserContextMethods'
 import './NavBar.css'
-
+import { Link } from 'react-router-dom'
 const NavBar = () => {
   const userContext = useContext(UserContext)
   const user = userContext?.user
@@ -35,17 +35,17 @@ const NavBar = () => {
               }}
             >
               <Nav.Item>
-                <Nav.Link href="/Home">
+                <Nav.Link as={Link} to="/Home">
                   <Gem className=" text-[#48ec5b] h-6 w-auto lg:block" />
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link id="trade" href="/Trade">
+                <Nav.Link id="trade" as={Link} to="/Trade">
                   Trade
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link id="portfolio" href="/Portfolio">
+                <Nav.Link id="portfolio" as={Link} to="/Portfolio">
                   Portfolio
                 </Nav.Link>
               </Nav.Item>
@@ -59,11 +59,11 @@ const NavBar = () => {
               <Nav.Item>
                 <Button type="button" onClick={() => jwtLogout()} size="sm">
                   {user !== null ? (
-                    <Nav.Link id="login" href="/">
+                    <Nav.Link id="login" as={Link} to="/">
                       Logout
                     </Nav.Link>
                   ) : (
-                    <Nav.Link id="logout" href="/">
+                    <Nav.Link id="logout" as={Link} to="/">
                       Login
                     </Nav.Link>
                   )}
