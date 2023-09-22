@@ -147,3 +147,15 @@ app.post('/api/login', async (req: Request, res: Response) => {
     console.log(err)
   }
 })
+
+app.get('/api/data', async (req: Request, res: Response) => {
+  // need to get id and query the id to match it to the table
+  try {
+    const databaseRes = await client.query(
+      `SELECT * FROM public."stock_portfolio"`
+    )
+    console.log('databaseRes', databaseRes)
+  } catch (err) {
+    console.log(err)
+  }
+})
