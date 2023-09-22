@@ -148,6 +148,7 @@ app.post('/api/login', async (req: Request, res: Response) => {
   }
 })
 
+// try a POST for the userID and return data from that ID
 app.get('/api/data', async (req: Request, res: Response) => {
   // need to get id and query the id to match it to the table
   try {
