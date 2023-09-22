@@ -1,16 +1,5 @@
 import { createContext } from 'react'
-
-export type UserContext = {
-  email: string
-  password: string
-  userID: number
-  exp: number
-}
-
-export type UserContextType = {
-  user: UserContext | null
-  setUser: React.Dispatch<React.SetStateAction<UserContext | null>>
-}
+import { UserContextType, UserContext } from './types'
 
 const UserContext = createContext<UserContextType | null>(null)
 
