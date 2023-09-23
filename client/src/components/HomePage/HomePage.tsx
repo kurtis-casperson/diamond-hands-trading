@@ -4,24 +4,21 @@ import { useNavigate } from 'react-router-dom'
 import MarketNewsTable from './MarketNewsTable'
 import { UserContext } from '../../utils/UserContextMethods'
 import { useContext } from 'react'
+import { getMarketNews } from '../../utils/MarketNewsMethods'
 
 const HomePage = () => {
   const [marketNews, setMarketNews] = useState([])
   const userContext = useContext(UserContext)
   const navigate = useNavigate()
-  useEffect(() => {
-    async function getMarketNews() {
-      try {
-        const response = await axios.get('/api/marketNews')
 
-        setMarketNews(response.data)
-      } catch (error) {
-        console.error(error)
-      }
+  useEffect(() => {
+    const fetchMarketNews = async () => {
+      const marketNews = await getMarketNews()
+      setMarketNews(marketNews)
     }
-    getMarketNews()
+    fetchMarketNews()
   }, [])
-  console.log(userContext, ' context home page')
+
   const marketNewsTable = marketNews.map((news) => {
     return <MarketNewsTable key={news['id']} news={news} />
   })
