@@ -148,14 +148,19 @@ app.post('/api/login', async (req: Request, res: Response) => {
   }
 })
 
-// try a POST for the userID and return data from that ID
-app.get('/api/data', async (req: Request, res: Response) => {
-  // need to get id and query the id to match it to the table
+app.post('/api/data', async (req: Request, res: Response) => {
   try {
+    const { user_id } = req.body
+    console.log('user_id', user_id)
     const databaseRes = await client.query(
-      `SELECT * FROM public."stock_portfolio"`
+      `SELECT * FROM public."stock_portfolio" WHERE user_id = $1`,
+      [user_id]
     )
-    console.log('databaseRes', databaseRes)
+    if (databaseRes === 0) {
+      res.status(501).json({ error: 'error loading data' })
+    } else {
+      return res.json(databaseRes.rows)
+    }
   } catch (err) {
     console.log(err)
   }
