@@ -1,24 +1,47 @@
-import { useState } from 'react';
-// import TradeModal from '../TradeModal/TradeModal';
-import PortfolioTable from './PortfolioTable';
+import axios from 'axios'
+import { useEffect, useContext, useState } from 'react'
+import PortfolioTable from './PortfolioTable'
 import { TableData } from './type'
-
-// type Props = {
-//   portfolioValue: number;
-//   stockSymbol: string;
-// }
+import { UserContext } from '../../utils/UserContextMethods'
 
 const Portfolio = () => {
-    const [tableData, setTableData] = useState<TableData>([]);
-    // const [portfolioValue, setPortfolioValue] = useState(10000)
-    // take the value from the bought shares and add it to the table.
-    // then add or substract from the portfolioValue
+  const [tableData, setTableData] = useState<TableData>([])
+  const userContext = useContext(UserContext)
+  const user = userContext?.user
+  const userId = user?.userID
+  useEffect(() => {
+    fetchData()
+  }, [])
 
-    // const changeTableData = (value: string | number) => setTableData(value)
+  const fetchData = async () => {
+    try {
+      const response = await axios.post(`/api/data`, {
+        user_id: userId,
+      })
+      setTableData(response.data)
+      console.log('response', response.data)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
+
+  // const portfolioTable = tableData.map((data) => {
+  //   return <PortfolioTable key={data} data={data} />
+  // })
+
+  // const [portfolioValue, setPortfolioValue] = useState(10000)
+  // take the value from the bought shares and add it to the table.
+  // then add or substract from the portfolioValue
+
+  // const changeTableData = (value: string | number) => setTableData(value)
+  {
+    /* // <TradeModal portfolioValue={portfolioValue} /> */
+  }
   return (
-    // <TradeModal portfolioValue={portfolioValue} />
-    <PortfolioTable tableData={tableData} setTableData={setTableData} />
-    // 
+    <>
+      {/* <div>{portfolioTable}</div> */}
+      <PortfolioTable tableData={tableData} />
+    </>
   )
 }
 
