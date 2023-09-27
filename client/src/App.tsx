@@ -10,10 +10,11 @@ import './App.css'
 
 function App() {
   const userContext = useContext(UserContext)
+
   const [user, setUser] = useState(userContext ? userContext.user : null)
 
   useEffect(() => {
-    console.log('user context effect', user)
+    localStorage.setItem('user', JSON.stringify(user))
   }, [user])
 
   return (
