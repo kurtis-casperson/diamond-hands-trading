@@ -156,7 +156,7 @@ app.post('/api/data', async (req: Request, res: Response) => {
       `SELECT * FROM public."stock_portfolio" WHERE user_id = $1`,
       [user_id]
     )
-    if (databaseRes === 0) {
+    if (databaseRes.rows === 0) {
       res.status(501).json({ error: 'error loading data' })
     } else {
       return res.json(databaseRes.rows)
