@@ -1,12 +1,10 @@
 import { createContext } from 'react'
 import { UserContextType, UserContext } from './types'
-import Cookies from 'universal-cookie'
-import jwt from 'jwt-decode'
 
-// const cookies = new Cookies()
-// const decodedUserCookie: any = jwt(cookies.get('jwt_authorization'))
+const getUser = localStorage.getItem('user')
+const user = JSON.parse(getUser || '{}') || null
 
-const UserContext = createContext<UserContextType | null>(null)
+const UserContext = createContext<UserContextType>(user)
 
 export const UserProvider = UserContext.Provider
 
