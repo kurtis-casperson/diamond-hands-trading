@@ -64,6 +64,7 @@ const TradeModal = ({
         company: stockName,
         symbol: stockSymbol,
         total_value: transactionValue,
+        shares: numberShares,
       })
       response
     } catch (error) {
