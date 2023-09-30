@@ -91,11 +91,11 @@ client.connect()
 
 app.post('/api/trade', async (req: Request, res: Response) => {
   try {
-    const { company, symbol, user } = req.body
+    const { company, symbol, user, total_value } = req.body
     const query = `
-    INSERT INTO public."stock_portfolio" ( "company","symbol", "user_id") VALUES ($1, $2, $3)
+    INSERT INTO public."stock_portfolio" ( "company","symbol", "user_id", "total_value") VALUES ($1, $2, $3, $4)
       RETURNING *`
-    await client.query(query, [company, symbol, user])
+    await client.query(query, [company, symbol, user, total_value])
   } catch (err) {
     console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error inserting data' })
@@ -163,5 +163,25 @@ app.post('/api/data', async (req: Request, res: Response) => {
     }
   } catch (err) {
     console.log(err)
+  }
+})
+
+app.post('/api/transaction_value', async (req: Request, res: Response) => {
+  try {
+    const { user_id, total_value } = req.body
+    console.log('id and value', user_id, total_value)
+    const query = `
+    INSERT INTO public."cash_transactions" ( "user_id","total_value") VALUES ($1, $2)
+      RETURNING *`
+    await client.query(query, [user_id, total_value])
+    // const databaseRes = await client.query(
+    //   `SELECT "transaction_value" FROM public."cash_transactions" WHERE "transaction_value" = $1`,
+    //   [transaction_value]
+    // )
+    // console.log('databaseRes', databaseRes)
+    // return res.json(databaseRes)
+  } catch (err) {
+    console.error('Error inserting data:', err)
+    res.status(500).json({ error: 'Error inserting data' })
   }
 })

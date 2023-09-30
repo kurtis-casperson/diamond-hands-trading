@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 // import FocusRefComponent from './focusRefComponent';
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
@@ -28,6 +28,13 @@ const TradeModal = ({
   const handleShow = () => setShow(true)
   let purchaseValue: number
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     // const cashData = await getUserCash(userId)
+  //   }
+  //   fetchData()
+  // }, [])
+
   const getStockPrice = async () => {
     const getStockPrice = await fetchStockPrice(stockSymbol)
     setStockPrice(getStockPrice)
@@ -46,19 +53,46 @@ const TradeModal = ({
   const submitTrade = async (
     stockSymbol: string,
     stockName: string,
-    userId: number | undefined
+    userId: number | undefined,
+    stockPrice: number,
+    numberShares: number
   ) => {
+    const transactionValue = stockPrice * numberShares
     try {
       let response = await axios.post('/api/trade', {
         user: userId,
         company: stockName,
         symbol: stockSymbol,
+        total_value: transactionValue,
       })
       response
     } catch (error) {
       console.error(error)
     }
   }
+
+  const getUserCash = async (userId: number | undefined) => {
+    const res = await axios.get(`/api/get_cash/${userId}`)
+    const cash: number = res.data.cash
+    setPortfolioValue(cash)
+  }
+
+  const updateUserTransactions = async (
+    userId: number | undefined,
+    stockPrice: number,
+    numberShares: number
+  ) => {
+    const transactionValue = stockPrice * numberShares
+    try {
+      await axios.post('/api/transaction_value', {
+        user_id: userId,
+        total_value: transactionValue,
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <>
       <button
@@ -115,7 +149,18 @@ const TradeModal = ({
             variant="primary"
             onClick={() => {
               shareValue(stockPrice as number, numberShares as number),
-                submitTrade(stockSymbol, stockName, userId)
+                submitTrade(
+                  stockSymbol,
+                  stockName,
+                  userId,
+                  stockPrice as number,
+                  numberShares as number
+                )
+              // updateUserTransactions(
+              //   userId,
+              //   stockPrice as number,
+              //   numberShares as number
+              // )
             }}
           >
             Submit
