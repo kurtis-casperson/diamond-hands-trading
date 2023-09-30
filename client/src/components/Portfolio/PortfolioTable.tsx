@@ -24,7 +24,7 @@ const PortfolioTable = ({ tableData }: Props) => {
               <td>{portfolioData.symbol}</td>
               <td>{portfolioData.company}</td>
               <td>{portfolioData.shares}</td>
-              <td>{portfolioData.amount}</td>
+              <td>{portfolioData.total_value}</td>
               <td></td>
             </tr>
           ))}
