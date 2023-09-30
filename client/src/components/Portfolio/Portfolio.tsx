@@ -15,7 +15,7 @@ const Portfolio = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.post(`/api/data`, {
+      const response = await axios.post('/api/data', {
         user_id: userId,
       })
       setTableData(response.data)

@@ -6,7 +6,6 @@ type Props = {
 }
 
 const PortfolioTable = ({ tableData }: Props) => {
-  console.log('tableData', tableData)
   return (
     <>
       <Table id="tableCharacterData" striped bordered hover variant="dark">
