@@ -92,10 +92,31 @@ client.connect()
 app.post('/api/trade', async (req: Request, res: Response) => {
   try {
     const { company, symbol, user, total_value, shares } = req.body
-    const query = `
+
+    const databaseRes = await client.query(
+      `SELECT "symbol" FROM public."stock_portfolio" WHERE user_id = $1`,
+      [user]
+    )
+
+    databaseRes.rows.map(async (row: any) => {
+      if (symbol === row.symbol) {
+        const updateQuery = `UPDATE public."stock_portfolio" SET "total_value" = "total_value" WHERE total_value =$1`
+
+        await client.query(updateQuery, [total_value])
+      }
+      console.log('row', row.symbol)
+    })
+
+    const insertRowData = `
     INSERT INTO public."stock_portfolio" ( "company","symbol", "user_id", "total_value", "shares") VALUES ($1, $2, $3, $4, $5)
       RETURNING *`
-    await client.query(query, [company, symbol, user, total_value, shares])
+    await client.query(insertRowData, [
+      company,
+      symbol,
+      user,
+      total_value,
+      shares,
+    ])
   } catch (err) {
     console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error inserting data' })
