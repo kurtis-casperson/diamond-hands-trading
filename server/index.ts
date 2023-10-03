@@ -93,29 +93,27 @@ app.post('/api/trade', async (req: Request, res: Response) => {
   try {
     const { company, symbol, user, total_value, shares } = req.body
 
-    const databaseRes = await client.query(
-      `SELECT "symbol" FROM public."stock_portfolio" WHERE user_id = $1`,
-      [user]
+    const selectAllStocks = await client.query(
+      `SELECT "symbol" FROM public."stock_portfolio" WHERE user_id = $1 AND symbol = $2`,
+      [user, symbol]
     )
-
-    databaseRes.rows.map(async (row: any) => {
-      if (symbol === row.symbol) {
-        const updateQuery = `UPDATE public."stock_portfolio" SET "total_value" = "total_value" WHERE total_value =$1`
-
-        await client.query(updateQuery, [total_value])
-      } else {
-        const insertRowData = `
+    console.log(selectAllStocks.rows.length)
+    if (selectAllStocks.rows.length === 0) {
+      const insertRowDataQuery = `
         INSERT INTO public."stock_portfolio" ( "company","symbol", "user_id", "total_value", "shares") VALUES ($1, $2, $3, $4, $5)
           RETURNING *`
-        await client.query(insertRowData, [
-          company,
-          symbol,
-          user,
-          total_value,
-          shares,
-        ])
-      }
-    })
+      client.query(insertRowDataQuery, [
+        company,
+        symbol,
+        user,
+        total_value,
+        shares,
+      ])
+    } else {
+      const updateQuery = `UPDATE public."stock_portfolio" SET "shares" = "shares" + $1, "total_value" = "total_value" + $2 WHERE symbol = $3 AND user_id = $4`
+
+      client.query(updateQuery, [shares, total_value, symbol, user])
+    }
   } catch (err) {
     console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error inserting data' })
