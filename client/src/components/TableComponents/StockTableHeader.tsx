@@ -2,12 +2,16 @@ import StockSearchTableRows from './StockSearchTableRows'
 import { Table } from 'react-bootstrap'
 
 type Props = {
-  stockResultData: { name: string; symbol: string}[]
-  portfolioValue: number
-  setPortfolioValue: (value: number) => void
+  stockResultData: { name: string; symbol: string }[]
+  cashValue: number
+  setCashValue: (value: number) => void
 }
 
-const StockTableHeader = ({ stockResultData, portfolioValue, setPortfolioValue }: Props) => {
+const StockTableHeader = ({
+  stockResultData,
+  cashValue,
+  setCashValue,
+}: Props) => {
   return (
     <>
       <Table id="tableCharacterData" striped bordered hover variant="dark">
@@ -20,7 +24,11 @@ const StockTableHeader = ({ stockResultData, portfolioValue, setPortfolioValue }
         </thead>
 
         <tbody>
-          <StockSearchTableRows stockResultData={stockResultData} portfolioValue={portfolioValue} setPortfolioValue={setPortfolioValue}  />
+          <StockSearchTableRows
+            stockResultData={stockResultData}
+            cashValue={cashValue}
+            setCashValue={setCashValue}
+          />
         </tbody>
       </Table>
     </>

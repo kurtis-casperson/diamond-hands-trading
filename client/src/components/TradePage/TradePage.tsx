@@ -7,7 +7,7 @@ import { useContext } from 'react'
 const TradePage: FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [stockResultData, setStockResultData] = useState([])
-  const [portfolioValue, setPortfolioValue] = useState(100000)
+  const [cashValue, setCashValue] = useState(100000)
   const userContext = useContext(UserContext)
 
   console.log(userContext, ' context trade page')
@@ -23,8 +23,8 @@ const TradePage: FC = () => {
       />
       <StockTableHeader
         stockResultData={stockResultData}
-        portfolioValue={portfolioValue}
-        setPortfolioValue={setPortfolioValue}
+        cashValue={cashValue}
+        setCashValue={setCashValue}
       />
     </>
   )
