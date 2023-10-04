@@ -9,15 +9,15 @@ import { UserContext } from '../../utils/UserContextMethods'
 type Props = {
   stockSymbol: string
   stockName: string
-  portfolioValue: number
-  setPortfolioValue: (value: number) => void
+  cashValue: number
+  setCashValue: (value: number) => void
 }
 
 const TradeModal = ({
   stockSymbol,
   stockName,
-  portfolioValue,
-  setPortfolioValue,
+  cashValue,
+  setCashValue,
 }: Props) => {
   const userContext = useContext(UserContext)
   const userId = userContext?.user?.userID
@@ -29,11 +29,8 @@ const TradeModal = ({
   let purchaseValue: number
 
   // useEffect(() => {
-  //   const fetchData = async () => {
-  //     // const cashData = await getUserCash(userId)
-  //   }
-  //   fetchData()
-  // }, [])
+  //   shareValue(stockPrice as number, numberShares as number)
+  // }, [cashValue])
 
   const getStockPrice = async () => {
     const getStockPrice = await fetchStockPrice(stockSymbol)
@@ -41,9 +38,9 @@ const TradeModal = ({
     handleShow()
   }
 
-  const shareValue = (stockPrice: number, numberShares: number) => {
+  const shareValue = async (stockPrice: number, numberShares: number) => {
     purchaseValue = stockPrice * numberShares
-    setPortfolioValue(portfolioValue - purchaseValue)
+    await setCashValue(cashValue - purchaseValue)
   }
 
   const handleInputNumberShares = (e: any) => {
@@ -75,19 +72,16 @@ const TradeModal = ({
   const getUserCash = async (userId: number | undefined) => {
     const res = await axios.get(`/api/get_cash/${userId}`)
     const cash: number = res.data.cash
-    setPortfolioValue(cash)
+    setCashValue(cash)
   }
 
-  const updateUserTransactions = async (
-    userId: number | undefined,
-    stockPrice: number,
-    numberShares: number
-  ) => {
-    const transactionValue = stockPrice * numberShares
+  const updateCashValue = async (userId: number | undefined) => {
     try {
-      await axios.post('/api/transaction_value', {
+      const avaialableCash = cashValue
+      console.log('available cash', avaialableCash)
+      await axios.post('/api/availableCash', {
         user_id: userId,
-        total_value: transactionValue,
+        available_cash: avaialableCash,
       })
     } catch (err) {
       console.log(err)
@@ -127,7 +121,7 @@ const TradeModal = ({
         </Modal.Header>
         <Modal.Body>
           <div>
-            <h3>Available Cash: {portfolioValue}</h3>
+            <h3>Available Cash: {cashValue}</h3>
           </div>
 
           <div className="row-one">
@@ -135,7 +129,6 @@ const TradeModal = ({
               type="number"
               placeholder="Shares to Buy"
               name="shares"
-              // value={}
               onChange={handleInputNumberShares}
             ></input>
 
@@ -157,11 +150,7 @@ const TradeModal = ({
                   stockPrice as number,
                   numberShares as number
                 )
-              // updateUserTransactions(
-              //   userId,
-              //   stockPrice as number,
-              //   numberShares as number
-              // )
+              updateCashValue(userId)
             }}
           >
             Submit

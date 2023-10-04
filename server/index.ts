@@ -184,14 +184,14 @@ app.post('/api/data', async (req: Request, res: Response) => {
   }
 })
 
-app.post('/api/transaction_value', async (req: Request, res: Response) => {
+app.post('/api/availableCash', async (req: Request, res: Response) => {
   try {
-    const { user_id, total_value } = req.body
-    console.log('id and value', user_id, total_value)
+    const { user_id, available_cash } = req.body
+    console.log('id and value', user_id, available_cash)
     const query = `
-    INSERT INTO public."cash_transactions" ( "user_id","total_value") VALUES ($1, $2)
+    INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
       RETURNING *`
-    await client.query(query, [user_id, total_value])
+    await client.query(query, [user_id, available_cash])
     // const databaseRes = await client.query(
     //   `SELECT "transaction_value" FROM public."cash_transactions" WHERE "transaction_value" = $1`,
     //   [transaction_value]
