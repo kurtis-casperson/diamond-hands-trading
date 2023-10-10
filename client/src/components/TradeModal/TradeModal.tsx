@@ -27,7 +27,7 @@ const TradeModal = ({
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
   let purchaseValue: number
-
+  let transactionValue: number
   // useEffect(() => {
   //   shareValue(stockPrice as number, numberShares as number)
   // }, [cashValue])
@@ -54,7 +54,7 @@ const TradeModal = ({
     stockPrice: number,
     numberShares: number
   ) => {
-    const transactionValue = stockPrice * numberShares
+    transactionValue = stockPrice * numberShares
     try {
       let response = await axios.post('/api/trade', {
         user: userId,
@@ -75,19 +75,25 @@ const TradeModal = ({
     setCashValue(cash)
   }
 
-  const updateCashValue = async (userId: number | undefined) => {
+  const updateCashValue = async (
+    userId: number | undefined,
+    stockPrice: number,
+    numberShares: number
+  ) => {
     try {
       const avaialableCash = cashValue
+      transactionValue = stockPrice * numberShares
       console.log('available cash', avaialableCash)
       await axios.post('/api/availableCash', {
         user_id: userId,
         available_cash: avaialableCash,
+        transactionValue: transactionValue,
       })
     } catch (err) {
       console.log(err)
     }
   }
-
+  console.log('cash value', cashValue)
   return (
     <>
       <button
@@ -150,7 +156,11 @@ const TradeModal = ({
                   stockPrice as number,
                   numberShares as number
                 )
-              updateCashValue(userId)
+              updateCashValue(
+                userId,
+                stockPrice as number,
+                numberShares as number
+              )
             }}
           >
             Submit
