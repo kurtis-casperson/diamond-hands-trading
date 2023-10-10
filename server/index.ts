@@ -97,7 +97,7 @@ app.post('/api/trade', async (req: Request, res: Response) => {
       `SELECT "symbol" FROM public."stock_portfolio" WHERE user_id = $1 AND symbol = $2`,
       [user, symbol]
     )
-    console.log(selectAllStocks.rows.length)
+
     if (selectAllStocks.rows.length === 0) {
       const insertRowDataQuery = `
         INSERT INTO public."stock_portfolio" ( "company","symbol", "user_id", "total_value", "shares") VALUES ($1, $2, $3, $4, $5)
@@ -161,7 +161,6 @@ app.post('/api/login', async (req: Request, res: Response) => {
       return res.json({ token })
     }
   } catch (err) {
-    // send error 500
     console.log(err)
   }
 })
@@ -171,7 +170,7 @@ app.post('/api/data', async (req: Request, res: Response) => {
     const { user_id } = req.body
 
     const databaseRes = await client.query(
-      `SELECT * FROM public."stock_portfolio" WHERE user_id = $1`,
+      `SELECT * FROM public."stock_portfolio" WHERE "user_id" = $1`,
       [user_id]
     )
     if (databaseRes.rows === 0) {
@@ -186,12 +185,26 @@ app.post('/api/data', async (req: Request, res: Response) => {
 
 app.post('/api/availableCash', async (req: Request, res: Response) => {
   try {
-    const { user_id, available_cash } = req.body
+    const { user_id, available_cash, transactionValue } = req.body
     console.log('id and value', user_id, available_cash)
-    const query = `
-    INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
-      RETURNING *`
-    await client.query(query, [user_id, available_cash])
+
+    const selectUser = await client.query(
+      `SELECT "user_id" FROM public."stock_portfolio" WHERE "user_id" = $1 `,
+      [user_id]
+    )
+    console.log('select user', selectUser.rows)
+    if (selectUser.rows.length === 0) {
+      console.log('insert')
+      const query = `
+      INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
+        RETURNING *`
+      client.query(query, [user_id, available_cash])
+    } else {
+      console.log('update')
+      const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
+
+      client.query(updateCashQueryBuy, [transactionValue, user_id])
+    }
     // const databaseRes = await client.query(
     //   `SELECT "transaction_value" FROM public."cash_transactions" WHERE "transaction_value" = $1`,
     //   [transaction_value]
