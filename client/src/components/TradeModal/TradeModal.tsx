@@ -28,9 +28,10 @@ const TradeModal = ({
   const handleShow = () => setShow(true)
   let purchaseValue: number
   let transactionValue: number
-  // useEffect(() => {
-  //   shareValue(stockPrice as number, numberShares as number)
-  // }, [cashValue])
+
+  useEffect(() => {
+    getUserCash(userId)
+  }, [])
 
   const getStockPrice = async () => {
     const getStockPrice = await fetchStockPrice(stockSymbol)
@@ -70,8 +71,11 @@ const TradeModal = ({
   }
 
   const getUserCash = async (userId: number | undefined) => {
-    const res = await axios.get(`/api/get_cash/${userId}`)
-    const cash: number = res.data.cash
+    const res = await axios.post(`/api/get_cash/`, {
+      userId: userId,
+    })
+    console.log('res', res)
+    const cash: number = res.data
     setCashValue(cash)
   }
 

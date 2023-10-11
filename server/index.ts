@@ -205,14 +205,28 @@ app.post('/api/availableCash', async (req: Request, res: Response) => {
 
       client.query(updateCashQueryBuy, [transactionValue, user_id])
     }
-    // const databaseRes = await client.query(
-    //   `SELECT "transaction_value" FROM public."cash_transactions" WHERE "transaction_value" = $1`,
-    //   [transaction_value]
-    // )
-    // console.log('databaseRes', databaseRes)
-    // return res.json(databaseRes)
   } catch (err) {
     console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error inserting data' })
+  }
+})
+
+app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.body
+
+    const getCashQuery = await client.query(
+      `SELECT "available_cash" FROM public."cash_transactions" WHERE user_id = $1`,
+      [userId]
+    )
+    console.log('getCashQuery', getCashQuery)
+    if (getCashQuery.rows > 0) {
+      res.json(getCashQuery)
+    } else {
+      res.json(100000)
+    }
+  } catch (err) {
+    console.error('Error getting data:', err)
+    res.status(500).json({ error: 'Error getting data' })
   }
 })
