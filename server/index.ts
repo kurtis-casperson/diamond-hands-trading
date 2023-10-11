@@ -157,7 +157,7 @@ app.post('/api/login', async (req: Request, res: Response) => {
       const userEmail = databaseRes.rows[0].user_email
       const userID = databaseRes.rows[0].user_id
       const token = jwt.sign({ userEmail, userID }, process.env.ACCESS_TOKEN)
-      console.log(userID)
+
       return res.json({ token })
     }
   } catch (err) {
@@ -219,11 +219,11 @@ app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
       `SELECT "available_cash" FROM public."cash_transactions" WHERE user_id = $1`,
       [userId]
     )
-    console.log('getCashQuery', getCashQuery)
-    if (getCashQuery.rows > 0) {
+
+    if (getCashQuery.rows) {
       res.json(getCashQuery)
     } else {
-      res.json(100000)
+      return res.json(100000)
     }
   } catch (err) {
     console.error('Error getting data:', err)
