@@ -189,7 +189,7 @@ app.post('/api/availableCash', async (req: Request, res: Response) => {
     console.log('id and value', user_id, available_cash)
 
     const selectUser = await client.query(
-      `SELECT "user_id" FROM public."stock_portfolio" WHERE "user_id" = $1 `,
+      `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
       [user_id]
     )
     console.log('select user', selectUser.rows)
