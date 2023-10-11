@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from 'react'
-// import FocusRefComponent from './focusRefComponent';
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import axios from 'axios'
@@ -74,10 +73,12 @@ const TradeModal = ({
     const res = await axios.post(`/api/get_cash/`, {
       userId: userId,
     })
-    console.log('res', res)
-    const cash: number = res.data
+    console.log('res', res.data.rows[0].available_cash)
+    const cash: number = res.data.rows[0].available_cash
     setCashValue(cash)
   }
+
+  // need to set the decimal place to 2
 
   const updateCashValue = async (
     userId: number | undefined,
@@ -87,7 +88,7 @@ const TradeModal = ({
     try {
       const avaialableCash = cashValue
       transactionValue = stockPrice * numberShares
-      console.log('available cash', avaialableCash)
+
       await axios.post('/api/availableCash', {
         user_id: userId,
         available_cash: avaialableCash,
@@ -97,7 +98,7 @@ const TradeModal = ({
       console.log(err)
     }
   }
-  console.log('cash value', cashValue)
+
   return (
     <>
       <button
@@ -141,8 +142,6 @@ const TradeModal = ({
               name="shares"
               onChange={handleInputNumberShares}
             ></input>
-
-            {/* <FocusRefComponent shareValue={shareValue}/> */}
           </div>
         </Modal.Body>
         <Modal.Footer>
