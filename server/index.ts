@@ -91,7 +91,8 @@ client.connect()
 
 app.post('/api/trade', async (req: Request, res: Response) => {
   try {
-    const { company, symbol, user, total_value, shares } = req.body
+    const { company, symbol, user, total_value, shares, available_cash } =
+      req.body
 
     const selectAllStocks = await client.query(
       `SELECT "symbol" FROM public."stock_portfolio" WHERE user_id = $1 AND symbol = $2`,
@@ -113,6 +114,24 @@ app.post('/api/trade', async (req: Request, res: Response) => {
       const updateQuery = `UPDATE public."stock_portfolio" SET "shares" = "shares" + $1, "total_value" = "total_value" + $2 WHERE symbol = $3 AND user_id = $4`
 
       client.query(updateQuery, [shares, total_value, symbol, user])
+    }
+
+    const selectUserCashTable = await client.query(
+      `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
+      [user]
+    )
+    console.log('select user', selectUserCashTable.rows)
+    if (selectUserCashTable.rows.length === 0) {
+      console.log('insert')
+      const InsertCashQuery = `
+      INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
+        RETURNING *`
+      client.query(InsertCashQuery, [user, available_cash])
+    } else {
+      console.log('update')
+      const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
+
+      client.query(updateCashQueryBuy, [total_value, user])
     }
   } catch (err) {
     console.error('Error inserting data:', err)
@@ -183,33 +202,33 @@ app.post('/api/data', async (req: Request, res: Response) => {
   }
 })
 
-app.post('/api/availableCash', async (req: Request, res: Response) => {
-  try {
-    const { user_id, available_cash, transactionValue } = req.body
-    console.log('id and value', user_id, available_cash)
+// app.post('/api/availableCash', async (req: Request, res: Response) => {
+//   try {
+//     const { user_id, available_cash, transactionValue } = req.body
+//     console.log('id and value', user_id, available_cash)
 
-    const selectUser = await client.query(
-      `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
-      [user_id]
-    )
-    console.log('select user', selectUser.rows)
-    if (selectUser.rows.length === 0) {
-      console.log('insert')
-      const query = `
-      INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
-        RETURNING *`
-      client.query(query, [user_id, available_cash])
-    } else {
-      console.log('update')
-      const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
+//     const selectUserCashTable = await client.query(
+//       `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
+//       [user_id]
+//     )
+//     console.log('select user', selectUserCashTable.rows)
+//     if (selectUserCashTable.rows.length === 0) {
+//       console.log('insert')
+//       const InsertCashQuery = `
+//       INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
+//         RETURNING *`
+//       client.query(InsertCashQuery, [user_id, available_cash])
+//     } else {
+//       console.log('update')
+//       const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
 
-      client.query(updateCashQueryBuy, [transactionValue, user_id])
-    }
-  } catch (err) {
-    console.error('Error inserting data:', err)
-    res.status(500).json({ error: 'Error inserting data' })
-  }
-})
+//       client.query(updateCashQueryBuy, [transactionValue, user_id])
+//     }
+//   } catch (err) {
+//     console.error('Error inserting data:', err)
+//     res.status(500).json({ error: 'Error inserting data' })
+//   }
+// })
 
 app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
   try {
@@ -219,7 +238,7 @@ app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
       `SELECT "available_cash" FROM public."cash_transactions" WHERE user_id = $1`,
       [userId]
     )
-
+    console.log('getCashQuery', getCashQuery.rows)
     if (getCashQuery.rows) {
       res.json(getCashQuery)
     } else {
