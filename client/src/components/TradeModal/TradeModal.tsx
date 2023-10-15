@@ -151,14 +151,9 @@ const TradeModal = ({
             <h3>Available Cash: {cashValue}</h3>
           </div>
           <div className="flex">
-            <div
-              className={
-                inSellState === false
-                  ? ' border-red-500'
-                  : 'buy border-blue-500'
-              }
-            >
+            <div>
               <label
+                style={{ color: inSellState === false ? 'green' : 'black' }}
                 className="select cursor-pointer rounded-lg border-2 border-gray-200 mr-2 mb-3
    py-1  pr-3 font-bold text-green-500 focus:focus-visible checked  "
               >
@@ -173,6 +168,7 @@ const TradeModal = ({
             </div>
             <div className="sell">
               <label
+                style={{ color: inSellState === true ? 'red' : 'black' }}
                 className="select cursor-pointer rounded-lg border-2 border-gray-200 ml-2 mb-3
    py-1 pr-3 font-bold text-red-500 transition-colors accent-gray-700 peer-checked:bg-gray-200 peer-checked:text-gray-900 peer-checked:border-gray-200 "
               >
@@ -202,6 +198,10 @@ const TradeModal = ({
           <Button
             variant="primary"
             onClick={() => {
+              if (inSellState === null) {
+                alert('select buy or sell')
+                return false
+              }
               shareValue(stockPrice as number, numberShares as number),
                 submitTrade(
                   stockSymbol,
@@ -210,6 +210,7 @@ const TradeModal = ({
                   stockPrice as number,
                   numberShares as number
                 )
+              setInSellState(null)
               // updateCashValue(
               //   userId,
               //   stockPrice as number,
