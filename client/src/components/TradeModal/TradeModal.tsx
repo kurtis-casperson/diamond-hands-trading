@@ -63,6 +63,13 @@ const TradeModal = ({
   ) => {
     const avaialableCash = cashValue
     transactionValue = stockPrice * numberShares
+    // const selectErrorMessage = () => {
+    //   if (inSellState === null) {
+    //     alert('select buy or sell')
+    //     return
+    //   }
+    // }
+    // selectErrorMessage()
     try {
       let response = await axios.post('/api/trade', {
         user: userId,
@@ -150,6 +157,7 @@ const TradeModal = ({
           <div>
             <h3>Available Cash: {cashValue}</h3>
           </div>
+          <p className="text-gray-600 text-xs pl-2">Select Buy or Sell</p>
           <div className="flex">
             <div>
               <label
@@ -200,7 +208,7 @@ const TradeModal = ({
             onClick={() => {
               if (inSellState === null) {
                 alert('select buy or sell')
-                return false
+                return
               }
               shareValue(stockPrice as number, numberShares as number),
                 submitTrade(
