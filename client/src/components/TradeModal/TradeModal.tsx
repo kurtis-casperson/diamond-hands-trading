@@ -47,12 +47,21 @@ const TradeModal = ({
 
   const shareValue = async (stockPrice: number, numberShares: number) => {
     purchaseValue = stockPrice * numberShares
-    await setCashValue(cashValue - purchaseValue)
+    if (inSellState === false) {
+      setCashValue(cashValue - purchaseValue)
+    }
+    if (inSellState === true) {
+      setCashValue(cashValue + purchaseValue)
+    }
   }
 
   const handleInputNumberShares = (e: any) => {
     setNumberShares(e.target.value)
   }
+
+  // TODO
+  // chnage app so 100000 is added to user acct when they sign up. not on the submit trade
+  // take away decimal places
 
   const submitTrade = async (
     stockSymbol: string,
@@ -63,32 +72,31 @@ const TradeModal = ({
   ) => {
     const avaialableCash = cashValue
     transactionValue = stockPrice * numberShares
-    // const selectErrorMessage = () => {
-    //   if (inSellState === null) {
-    //     alert('select buy or sell')
-    //     return
-    //   }
-    // }
-    // selectErrorMessage()
-    try {
-      let response = await axios.post('/api/trade', {
-        user: userId,
-        company: stockName,
-        symbol: stockSymbol,
-        available_cash: avaialableCash,
-        total_value: transactionValue,
-        shares: numberShares,
-      })
-      response
-    } catch (error) {
-      console.error(error)
+
+    if (inSellState === null) {
+      alert('select buy or sell')
+      return
+    } else {
+      try {
+        let response = await axios.post(`/api/trade/${inSellState}`, {
+          user: userId,
+          company: stockName,
+          symbol: stockSymbol,
+          available_cash: avaialableCash,
+          total_value: transactionValue,
+          shares: numberShares,
+        })
+        response
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 
   useEffect(() => {
     getUserCash(userId)
   }, [])
-
+  console.log('inSellState', inSellState)
   const getUserCash = async (userId: number | undefined) => {
     const res = await axios.post(`/api/get_cash/`, {
       userId: userId,
@@ -206,10 +214,6 @@ const TradeModal = ({
           <Button
             variant="primary"
             onClick={() => {
-              if (inSellState === null) {
-                alert('select buy or sell')
-                return
-              }
               shareValue(stockPrice as number, numberShares as number),
                 submitTrade(
                   stockSymbol,
