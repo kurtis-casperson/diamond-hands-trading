@@ -89,8 +89,10 @@ const client = new Client({
 
 client.connect()
 
-app.post('/api/trade', async (req: Request, res: Response) => {
+app.post(`/api/trade/:inSellState`, async (req: Request, res: Response) => {
   try {
+    const { inSellState } = req.params
+
     const { company, symbol, user, total_value, shares, available_cash } =
       req.body
 
@@ -110,29 +112,39 @@ app.post('/api/trade', async (req: Request, res: Response) => {
         total_value,
         shares,
       ])
-    } else {
-      const updateQuery = `UPDATE public."stock_portfolio" SET "shares" = "shares" + $1, "total_value" = "total_value" + $2 WHERE symbol = $3 AND user_id = $4`
-
-      client.query(updateQuery, [shares, total_value, symbol, user])
     }
-
-    const selectUserCashTable = await client.query(
-      `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
-      [user]
-    )
-    console.log('select user', selectUserCashTable.rows)
-    if (selectUserCashTable.rows.length === 0) {
-      console.log('insert')
-      const InsertCashQuery = `
-      INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
-        RETURNING *`
-      client.query(InsertCashQuery, [user, available_cash])
-    } else {
-      console.log('update')
+    if (selectAllStocks.rows.length > 0 && inSellState === 'false') {
+      const updateStockQueryBuy = `UPDATE public."stock_portfolio" SET "shares" = "shares" + $1, "total_value" = "total_value" + $2 WHERE symbol = $3 AND user_id = $4`
       const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
 
       client.query(updateCashQueryBuy, [total_value, user])
+      client.query(updateStockQueryBuy, [shares, total_value, symbol, user])
     }
+    if (selectAllStocks.rows.length > 0 && inSellState === 'true') {
+      const updateStockQuerySell = `UPDATE public."stock_portfolio" SET "shares" = "shares" - $1, "total_value" = "total_value" - $2 WHERE symbol = $3 AND user_id = $4`
+      const updateCashQuerySell = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" + $1 WHERE user_id = $2`
+
+      client.query(updateCashQuerySell, [total_value, user])
+      client.query(updateStockQuerySell, [shares, total_value, symbol, user])
+    }
+
+    // const selectUserCashTable = await client.query(
+    //   `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
+    //   [user]
+    // )
+    // console.log('select user', selectUserCashTable.rows)
+    // if (selectUserCashTable.rows.length === 0) {
+    //   console.log('insert')
+    //   const InsertCashQuery = `
+    //   INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
+    //     RETURNING *`
+    //   client.query(InsertCashQuery, [user, available_cash])
+    // } else {
+    //   console.log('update')
+    //   const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
+
+    //   client.query(updateCashQueryBuy, [total_value, user])
+    // }
   } catch (err) {
     console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error inserting data' })
@@ -201,34 +213,6 @@ app.post('/api/data', async (req: Request, res: Response) => {
     console.log(err)
   }
 })
-
-// app.post('/api/availableCash', async (req: Request, res: Response) => {
-//   try {
-//     const { user_id, available_cash, transactionValue } = req.body
-//     console.log('id and value', user_id, available_cash)
-
-//     const selectUserCashTable = await client.query(
-//       `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
-//       [user_id]
-//     )
-//     console.log('select user', selectUserCashTable.rows)
-//     if (selectUserCashTable.rows.length === 0) {
-//       console.log('insert')
-//       const InsertCashQuery = `
-//       INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
-//         RETURNING *`
-//       client.query(InsertCashQuery, [user_id, available_cash])
-//     } else {
-//       console.log('update')
-//       const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
-
-//       client.query(updateCashQueryBuy, [transactionValue, user_id])
-//     }
-//   } catch (err) {
-//     console.error('Error inserting data:', err)
-//     res.status(500).json({ error: 'Error inserting data' })
-//   }
-// })
 
 app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
   try {
