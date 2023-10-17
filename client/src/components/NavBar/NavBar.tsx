@@ -58,13 +58,13 @@ const NavBar = () => {
             >
               <Nav.Item>
                 <Button type="button" onClick={() => jwtLogout()} size="sm">
-                  {user !== null ? (
+                  {user === null || user === undefined ? (
                     <Nav.Link id="login" as={Link} to="/">
-                      Logout
+                      Login
                     </Nav.Link>
                   ) : (
                     <Nav.Link id="logout" as={Link} to="/">
-                      Login
+                      Logout
                     </Nav.Link>
                   )}
                 </Button>
