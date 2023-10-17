@@ -112,7 +112,18 @@ app.post(`/api/trade/:inSellState`, async (req: Request, res: Response) => {
         total_value,
         shares,
       ])
+      if (inSellState === 'false') {
+        const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
+
+        client.query(updateCashQueryBuy, [total_value, user])
+      }
+      if (inSellState === 'true') {
+        const updateCashQuerySell = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" + $1 WHERE user_id = $2`
+
+        client.query(updateCashQuerySell, [total_value, user])
+      }
     }
+
     if (selectAllStocks.rows.length > 0 && inSellState === 'false') {
       const updateStockQueryBuy = `UPDATE public."stock_portfolio" SET "shares" = "shares" + $1, "total_value" = "total_value" + $2 WHERE symbol = $3 AND user_id = $4`
       const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
