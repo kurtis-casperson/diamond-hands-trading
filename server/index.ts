@@ -127,24 +127,6 @@ app.post(`/api/trade/:inSellState`, async (req: Request, res: Response) => {
       client.query(updateCashQuerySell, [total_value, user])
       client.query(updateStockQuerySell, [shares, total_value, symbol, user])
     }
-
-    // const selectUserCashTable = await client.query(
-    //   `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
-    //   [user]
-    // )
-    // console.log('select user', selectUserCashTable.rows)
-    // if (selectUserCashTable.rows.length === 0) {
-    //   console.log('insert')
-    //   const InsertCashQuery = `
-    //   INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
-    //     RETURNING *`
-    //   client.query(InsertCashQuery, [user, available_cash])
-    // } else {
-    //   console.log('update')
-    //   const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
-
-    //   client.query(updateCashQueryBuy, [total_value, user])
-    // }
   } catch (err) {
     console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error inserting data' })
@@ -230,6 +212,32 @@ app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
     }
   } catch (err) {
     console.error('Error getting data:', err)
+    res.status(500).json({ error: 'Error getting data' })
+  }
+})
+
+app.post('/api/userTradingCash', async (req: Request, res: Response) => {
+  try {
+    const { user_id, tradingCash } = req.body
+    const selectUserCashTable = await client.query(
+      `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
+      [user_id]
+    )
+    console.log(
+      'cash',
+      tradingCash
+      // 'user',
+      // selectUserCashTable.rows[0].user_id
+    )
+
+    if (selectUserCashTable.rows.length === 0) {
+      const InsertCashQuery = `
+    INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
+      RETURNING *`
+      client.query(InsertCashQuery, [user_id, tradingCash])
+    }
+  } catch (err) {
+    console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error getting data' })
   }
 })
