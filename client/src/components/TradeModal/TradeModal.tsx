@@ -96,39 +96,17 @@ const TradeModal = ({
   useEffect(() => {
     getUserCash(userId)
   }, [])
-  console.log('inSellState', inSellState)
+
   const getUserCash = async (userId: number | undefined) => {
     const res = await axios.post(`/api/get_cash/`, {
       userId: userId,
     })
-    console.log('res', res)
-    console.log('res.data', res.data.rows[0].available_cash)
     const cash: number = res.data.rows[0].available_cash
-
     // const cash: number = res ? res.data.rows[0].available_cash : 100000
     setCashValue(cash)
   }
 
   // need to set the decimal place to 2
-
-  // const updateCashValue = async (
-  //   userId: number | undefined,
-  //   stockPrice: number,
-  //   numberShares: number
-  // ) => {
-  //   try {
-  //     const avaialableCash = cashValue
-  //     transactionValue = stockPrice * numberShares
-
-  //     await axios.post('/api/availableCash', {
-  //       user_id: userId,
-  //       available_cash: avaialableCash,
-  //       transactionValue: transactionValue,
-  //     })
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
 
   return (
     <>
