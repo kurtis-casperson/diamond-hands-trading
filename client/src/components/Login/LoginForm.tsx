@@ -1,5 +1,6 @@
 import SignupButton from './signupButton'
 import LoginButton from './LoginButton'
+import './LoginForm.css'
 
 type Props = {
   email: string
@@ -25,7 +26,7 @@ const LoginForm = ({
   }
 
   return (
-    <div className="bg-white p-8 rounded shadow-md w-96">
+    <div id="border">
       <form>
         <div className="mb-4">
           <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
