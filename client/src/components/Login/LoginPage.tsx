@@ -30,7 +30,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center h-screen bg-green-500">
+      <div className="flex justify-center items-center h-screen bg-white">
         <h2 className="text-2xl font-bold text-center text-black">
           Diamond Hand Trading
         </h2>
