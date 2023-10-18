@@ -47,11 +47,12 @@ const TradeModal = ({
 
   const shareValue = async (stockPrice: number, numberShares: number) => {
     purchaseValue = stockPrice * numberShares
+    let roundedShareValue: any = purchaseValue.toFixed(2)
     if (inSellState === false) {
-      setCashValue(cashValue - purchaseValue)
+      setCashValue(cashValue - roundedShareValue)
     }
     if (inSellState === true) {
-      setCashValue(cashValue + purchaseValue)
+      setCashValue(cashValue + roundedShareValue)
     }
   }
 
