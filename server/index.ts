@@ -146,7 +146,7 @@ app.post(`/api/trade/:inSellState`, async (req: Request, res: Response) => {
 
 app.post('/api/signup', async (req: Request, res: Response) => {
   try {
-    const { user_email, user_password } = req.body
+    const { user_email, user_password, tradingCash } = req.body
 
     const signupQuery = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
 
@@ -154,11 +154,24 @@ app.post('/api/signup', async (req: Request, res: Response) => {
       `SELECT "user_email" FROM public."user_data" WHERE "user_email" = $1`,
       [user_email]
     )
+    const selectUser = `SELECT "user_id" FROM public."user_data" WHERE "user_email" = $1`
+
+    const InsertCashQuery = `
+    INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
+      RETURNING *`
+
     if (databaseRes.rows.length > 0) {
       res.status(501).json({ error: 'User already exists' })
     } else {
       res.status(201).json({ message: 'Successfully Registered' })
       await client.query(signupQuery, [user_email, user_password])
+
+      const selectedUserID = await client.query(selectUser, [user_email])
+
+      await client.query(InsertCashQuery, [
+        selectedUserID.rows[0].user_id,
+        tradingCash,
+      ])
     }
   } catch (err) {
     console.log(err)
@@ -223,32 +236,6 @@ app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
     }
   } catch (err) {
     console.error('Error getting data:', err)
-    res.status(500).json({ error: 'Error getting data' })
-  }
-})
-
-app.post('/api/userTradingCash', async (req: Request, res: Response) => {
-  try {
-    const { user_id, tradingCash } = req.body
-    const selectUserCashTable = await client.query(
-      `SELECT "user_id" FROM public."cash_transactions" WHERE "user_id" = $1 `,
-      [user_id]
-    )
-    console.log(
-      'cash',
-      tradingCash
-      // 'user',
-      // selectUserCashTable.rows[0].user_id
-    )
-
-    if (selectUserCashTable.rows.length === 0) {
-      const InsertCashQuery = `
-    INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
-      RETURNING *`
-      client.query(InsertCashQuery, [user_id, tradingCash])
-    }
-  } catch (err) {
-    console.error('Error inserting data:', err)
     res.status(500).json({ error: 'Error getting data' })
   }
 })
