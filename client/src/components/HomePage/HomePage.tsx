@@ -1,18 +1,13 @@
-import { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import MarketNewsTable from './MarketNewsTable'
-import { UserContext } from '../../utils/UserContextMethods'
+
 import { getMarketNews } from '../../utils/MarketNewsMethods'
 
 const HomePage = () => {
   const [marketNews, setMarketNews] = useState([])
-  const [cashValue, setCashValue] = useState(100000)
-  const userContext = useContext(UserContext)
-  const userId = userContext?.user?.userID
-  const navigate = useNavigate()
 
-  console.log('userId', userId)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchMarketNews = async () => {
@@ -20,17 +15,6 @@ const HomePage = () => {
       setMarketNews(marketNews)
     }
     fetchMarketNews()
-    const userTradingCash = async (userId: number | undefined) => {
-      try {
-        await axios.post('/api/userTradingCash', {
-          user_id: userId,
-          tradingCash: cashValue,
-        })
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    userTradingCash(userId)
   }, [])
 
   const marketNewsTable = marketNews.map((news) => {
