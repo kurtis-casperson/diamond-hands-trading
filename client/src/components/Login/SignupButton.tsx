@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 type Props = {
@@ -17,7 +16,6 @@ const SignupButton = ({ email, password }: Props) => {
         let response = await axios.post('/api/signup', {
           user_email: email,
           user_password: password,
-          tradingCash: 100000,
         })
         if (response.status === 201) {
           alert('you signed up successfully')

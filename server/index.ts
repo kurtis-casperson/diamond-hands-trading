@@ -146,7 +146,7 @@ app.post(`/api/trade/:inSellState`, async (req: Request, res: Response) => {
 
 app.post('/api/signup', async (req: Request, res: Response) => {
   try {
-    const { user_email, user_password, tradingCash } = req.body
+    const { user_email, user_password } = req.body
 
     const signupQuery = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
 
@@ -170,7 +170,7 @@ app.post('/api/signup', async (req: Request, res: Response) => {
 
       await client.query(InsertCashQuery, [
         selectedUserID.rows[0].user_id,
-        tradingCash,
+        100000,
       ])
     }
   } catch (err) {
