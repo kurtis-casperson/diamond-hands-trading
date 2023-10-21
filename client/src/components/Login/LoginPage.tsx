@@ -30,17 +30,30 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center h-screen bg-white">
-        <h2 className="text-2xl font-bold text-center text-black">
+      <div className="justify-center ">
+        <h2 className="text-2xl font-bold text-center pt-20 text-black">
           Diamond Hand Trading
         </h2>
-        <LoginForm
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          jwtLogin={jwtLogin}
-        />
+        <p className="text-gray-600 pt-10">
+          Simulate your trades without the pressure of losing money!
+          <br></br>
+          Learn how to trade, without the risk!
+        </p>
+      </div>
+      <div className="flex justify-center items-center h-screen bg-white row">
+        <div className="col-md-3">
+          <p>Start with 10000</p>
+          <h4 className="text-green-600">Portfolio</h4>
+        </div>
+        <div>
+          <LoginForm
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            jwtLogin={jwtLogin}
+          />
+        </div>
       </div>
     </>
   )
