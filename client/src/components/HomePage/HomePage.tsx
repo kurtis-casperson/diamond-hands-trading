@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../../utils/UserContextMethods'
 import MarketNewsTable from './MarketNewsTable'
-
 import { getMarketNews } from '../../utils/MarketNewsMethods'
 
 const HomePage = () => {
+  const userContext = useContext(UserContext)
+  const userId = userContext?.user?.userID
   const [marketNews, setMarketNews] = useState([])
-
+  const [portfolioValue, setPortfolioValue] = useState(100000)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -15,7 +18,28 @@ const HomePage = () => {
       setMarketNews(marketNews)
     }
     fetchMarketNews()
+    getPortfolioValue(userId)
   }, [])
+
+  const getPortfolioValue = async (userId: number | undefined) => {
+    // debugger
+    const res = await axios.post(`/api/portfolio_value/`, {
+      userId: userId,
+    })
+    const getPortfolioStocks: any = res.data.rows
+    const getNumberShares: number = res.data.rows
+
+    getPortfolioStocks.map(async (arr: any) => {
+      const symbol = arr.symbol
+      const apiUrl = await axios.get(`/api/stock/price/${symbol}`)
+      console.log('apiUrl', [apiUrl.data])
+    })
+
+    console.log('portfolio stock response', getPortfolioStocks)
+    console.log('# shares response', getNumberShares)
+
+    // setPortfolioValue(getportfolioStocks)
+  }
 
   const marketNewsTable = marketNews.map((news) => {
     return <MarketNewsTable key={news['id']} news={news} />

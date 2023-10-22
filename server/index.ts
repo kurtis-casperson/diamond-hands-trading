@@ -228,12 +228,29 @@ app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
       `SELECT "available_cash" FROM public."cash_transactions" WHERE user_id = $1`,
       [userId]
     )
-    console.log('getCashQuery', getCashQuery.rows)
+
     if (getCashQuery.rows) {
       res.json(getCashQuery)
     } else {
       return res.json(100000)
     }
+  } catch (err) {
+    console.error('Error getting data:', err)
+    res.status(500).json({ error: 'Error getting data' })
+  }
+})
+
+app.post(`/api/portfolio_value/`, async (req: Request, res: Response) => {
+  const { userId } = req.body
+
+  try {
+    const getPortfolioValues = await client.query(
+      `SELECT "symbol" FROM public."stock_portfolio" WHERE user_id = $1`,
+      [userId]
+    )
+
+    console.log(getPortfolioValues.rows)
+    res.json(getPortfolioValues)
   } catch (err) {
     console.error('Error getting data:', err)
     res.status(500).json({ error: 'Error getting data' })
