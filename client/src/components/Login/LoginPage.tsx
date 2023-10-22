@@ -40,10 +40,13 @@ const LoginPage = () => {
           Learn how to trade, without the risk!
         </p>
       </div>
-      <div className="flex justify-center items-center h-screen bg-white row">
-        <div className="col-md-3">
+      <div className="flex justify-center h-screen bg-white row">
+        <div className="col-md-3 pt-20">
           <p>Start with 10000</p>
           <h4 className="text-green-600">Portfolio</h4>
+          <p className="text-black">
+            Get an up-to-date view of your portfolio and track your progress{' '}
+          </p>
         </div>
         <div>
           <LoginForm
