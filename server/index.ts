@@ -245,11 +245,10 @@ app.post(`/api/portfolio_value/`, async (req: Request, res: Response) => {
 
   try {
     const getPortfolioValues = await client.query(
-      `SELECT "symbol" FROM public."stock_portfolio" WHERE user_id = $1`,
+      `SELECT "symbol", "shares" FROM public."stock_portfolio" WHERE user_id = $1`,
       [userId]
     )
 
-    console.log(getPortfolioValues.rows)
     res.json(getPortfolioValues)
   } catch (err) {
     console.error('Error getting data:', err)
