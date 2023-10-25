@@ -3,14 +3,16 @@ import { useState, useEffect, useContext } from 'react'
 import { UserContext } from '../../utils/UserContextMethods'
 import MarketNewsTable from './MarketNewsTable'
 import { getMarketNews } from '../../utils/MarketNewsMethods'
+import PieChart from '../Charts/PieChart'
 
 const HomePage = () => {
   const userContext = useContext(UserContext)
   const userId = userContext?.user?.userID
   const [marketNews, setMarketNews] = useState([])
   const [portfolioValue, setPortfolioValue] = useState<any>()
-
+  const [holdings, setHoldings] = useState([])
   let stockPrices: any
+  let getPortfolioStocks: any
 
   useEffect(() => {
     const fetchMarketNews = async () => {
@@ -25,8 +27,8 @@ const HomePage = () => {
     const res = await axios.post(`/api/portfolio_value/`, {
       userId: userId,
     })
-    const getPortfolioStocks: any = res.data.rows
-
+    getPortfolioStocks = res.data.rows
+    // take this and add prices push to this array
     let sum = 0
     for (const arr of getPortfolioStocks) {
       const symbol = arr.symbol
@@ -56,6 +58,7 @@ const HomePage = () => {
       <div className="flex text-center justify-center">
         <h3 className="text-black pr-2 ">Portfolio Value: </h3>
         <h3 className="text-green-600  ">{portfolioValue}</h3>
+        <PieChart />
       </div>
     </>
   )
