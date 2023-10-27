@@ -202,7 +202,7 @@ app.post('/api/login', async (req: Request, res: Response) => {
   }
 })
 
-app.post('/api/data', async (req: Request, res: Response) => {
+app.post('/api/portfolio_data', async (req: Request, res: Response) => {
   try {
     const { user_id } = req.body
 
@@ -240,16 +240,34 @@ app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
   }
 })
 
-app.post(`/api/portfolio_value/`, async (req: Request, res: Response) => {
+app.post(`/api/stock_data/`, async (req: Request, res: Response) => {
   const { userId } = req.body
 
   try {
-    const getPortfolioValues = await client.query(
+    const getPortfolioData = await client.query(
       `SELECT "symbol", "shares" FROM public."stock_portfolio" WHERE user_id = $1`,
       [userId]
     )
 
-    res.json(getPortfolioValues)
+    console.log('getPortfolioData', getPortfolioData.rows)
+    let sum = 0
+    for (const arr of getPortfolioData.rows) {
+      const symbol = arr.symbol
+      const numberShares = arr.shares
+
+      const stockPrices = await axios.get(
+        `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINHUB_API_KEY}`
+      )
+
+      const data = stockPrices.data.c
+      console.log('data', data)
+      const totalStockValue = stockPrices.data.c * numberShares
+      sum += totalStockValue
+      console.log('sum', sum)
+    }
+    // cerate an object with all of the final data/values and then send that as the response
+
+    res.json(getPortfolioData)
   } catch (err) {
     console.error('Error getting data:', err)
     res.status(500).json({ error: 'Error getting data' })
