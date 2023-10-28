@@ -4,15 +4,15 @@ import { UserContext } from '../../utils/UserContextMethods'
 import MarketNewsTable from './MarketNewsTable'
 import { getMarketNews } from '../../utils/MarketNewsMethods'
 import PieChart from '../Charts/PieChart'
+import { PortfolioDataType } from '../../utils/types'
 
 const HomePage = () => {
   const userContext = useContext(UserContext)
   const userId = userContext?.user?.userID
   const [marketNews, setMarketNews] = useState([])
-  const [portfolioValue, setPortfolioValue] = useState<any>()
-  const [holdings, setHoldings] = useState([])
-  let stockPrices: any
-  let getPortfolioStocks: any
+  const [portfolioValue, setPortfolioValue] = useState<number>()
+  const [holdings, setHoldings] = useState<PortfolioDataType>()
+  let getPortfolioStocks: PortfolioDataType
 
   useEffect(() => {
     const fetchMarketNews = async () => {
@@ -24,27 +24,22 @@ const HomePage = () => {
   }, [])
 
   const getPortfolioValue = async (userId: number | undefined) => {
-    const res = await axios.post(`/api/portfolio_value/`, {
+    const res = await axios.post(`/api/stock_data/`, {
       userId: userId,
     })
-    getPortfolioStocks = res.data.rows
-    // take this and add prices push to this array
-    let sum = 0
-    for (const arr of getPortfolioStocks) {
-      const symbol = arr.symbol
-      const numberShares = arr.shares
-
-      stockPrices = await axios.get(`/api/stock/price/${symbol}`)
-
-      const totalStockValue = stockPrices.data * numberShares
-      sum += totalStockValue
-    }
-    setPortfolioValue(sum.toFixed(2))
+    getPortfolioStocks = res.data
+    console.log(getPortfolioStocks)
+    setPortfolioValue(getPortfolioStocks.totalValue)
+    setHoldings(getPortfolioStocks)
   }
 
   const marketNewsTable = marketNews.map((news) => {
     return <MarketNewsTable key={news['id']} news={news} />
   })
+
+  const renderPieChart = () => {
+    return holdings ? <PieChart holdings={holdings} /> : <></>
+  }
 
   return (
     <>
@@ -58,7 +53,7 @@ const HomePage = () => {
       <div className="flex text-center justify-center">
         <h3 className="text-black pr-2 ">Portfolio Value: </h3>
         <h3 className="text-green-600  ">{portfolioValue}</h3>
-        <PieChart />
+        {renderPieChart()}
       </div>
     </>
   )
