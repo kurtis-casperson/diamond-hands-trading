@@ -241,16 +241,24 @@ app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
 })
 
 app.post(`/api/stock_data/`, async (req: Request, res: Response) => {
-  const { userId } = req.body
+  type stockType = {
+    stockValue: number[]
+    totalValue: number
+    stockSymbol: number[]
+  }
 
+  const { userId } = req.body
   try {
     const getPortfolioData = await client.query(
       `SELECT "symbol", "shares" FROM public."stock_portfolio" WHERE user_id = $1`,
       [userId]
     )
-
     console.log('getPortfolioData', getPortfolioData.rows)
-    let sum = 0
+    let sum: stockType = {
+      totalValue: 0,
+      stockSymbol: [],
+      stockValue: [],
+    }
     for (const arr of getPortfolioData.rows) {
       const symbol = arr.symbol
       const numberShares = arr.shares
@@ -262,12 +270,13 @@ app.post(`/api/stock_data/`, async (req: Request, res: Response) => {
       const data = stockPrices.data.c
       console.log('data', data)
       const totalStockValue = stockPrices.data.c * numberShares
-      sum += totalStockValue
-      console.log('sum', sum)
+      sum.stockSymbol.push(symbol)
+      sum.stockValue.push(totalStockValue)
+      sum.totalValue += totalStockValue
     }
     // cerate an object with all of the final data/values and then send that as the response
-
-    res.json(getPortfolioData)
+    console.log(sum)
+    res.json(sum)
   } catch (err) {
     console.error('Error getting data:', err)
     res.status(500).json({ error: 'Error getting data' })
