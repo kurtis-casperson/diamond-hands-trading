@@ -11,7 +11,7 @@ export type UserContextType = {
 }
 
 export type PortfolioDataType = {
-  stockValue: number
+  stockValue: number[]
   totalValue: number
-  stockSymbol: string
+  stockSymbol: string[]
 }

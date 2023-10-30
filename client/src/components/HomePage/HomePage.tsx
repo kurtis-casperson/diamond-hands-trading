@@ -28,7 +28,7 @@ const HomePage = () => {
       userId: userId,
     })
     getPortfolioStocks = res.data
-    console.log(getPortfolioStocks)
+
     setPortfolioValue(getPortfolioStocks.totalValue)
     setHoldings(getPortfolioStocks)
   }
@@ -43,18 +43,17 @@ const HomePage = () => {
 
   return (
     <>
-      <div>HomePage</div>
       <h3 className="text-gray-600  text-left pl-10">
         News that's leading the Market
       </h3>
       <div id="newsTable" className="grid lg:grid-cols-4 gap-10 p-6 text-left ">
         {marketNewsTable}
       </div>
-      <div className="flex text-center justify-center">
-        <h3 className="text-black pr-2 ">Portfolio Value: </h3>
-        <h3 className="text-green-600  ">{portfolioValue}</h3>
-        {renderPieChart()}
+      <div className="flex text-center justify-center mt-20">
+        <h3 className="text-gray-600 pr-2 ">Portfolio Value </h3>
+        <h3 className="text-green-600  ">{portfolioValue?.toFixed(2)}</h3>
       </div>
+      <div>{renderPieChart()}</div>
     </>
   )
 }
