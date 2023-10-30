@@ -31,10 +31,10 @@ const LoginPage = () => {
   return (
     <>
       <div className="justify-center ">
-        <h2 className="text-2xl font-bold text-center pt-20 text-black">
+        <h2 className="text-4xl tracking-widest font-bold text-center pt-20 text-black">
           Diamond Hand Trading
         </h2>
-        <p className="text-gray-600 pt-10">
+        <p className="text-gray-600 pt-2 pb-20 mb-10">
           Simulate your trades without the pressure of losing money!
           <br></br>
           Learn how to trade, without the risk!
