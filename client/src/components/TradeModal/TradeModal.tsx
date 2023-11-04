@@ -60,10 +60,6 @@ const TradeModal = ({
     setNumberShares(e.target.value)
   }
 
-  // TODO
-  // chnage app so 100000 is added to user acct when they sign up. not on the submit trade
-  // take away decimal places
-
   const submitTrade = async (
     stockSymbol: string,
     stockName: string,
@@ -103,11 +99,9 @@ const TradeModal = ({
       userId: userId,
     })
     const cash: number = res.data.rows[0].available_cash
-    // const cash: number = res ? res.data.rows[0].available_cash : 100000
+
     setCashValue(cash)
   }
-
-  // need to set the decimal place to 2
 
   return (
     <>
@@ -165,7 +159,7 @@ const TradeModal = ({
               <label
                 style={{ color: inSellState === true ? 'red' : 'black' }}
                 className="select cursor-pointer rounded-lg border-2 border-gray-200 ml-2 mb-3
-   py-1 pr-3 font-bold text-red-500 transition-colors accent-gray-700 peer-checked:bg-gray-200 peer-checked:text-gray-900 peer-checked:border-gray-200 "
+   py-1 pr-3 font-bold text-red-500 transition-colors accent-gray-700 "
               >
                 <input
                   type="radio"
@@ -202,11 +196,6 @@ const TradeModal = ({
                   numberShares as number
                 )
               setInSellState(null)
-              // updateCashValue(
-              //   userId,
-              //   stockPrice as number,
-              //   numberShares as number
-              // )
             }}
           >
             Submit
