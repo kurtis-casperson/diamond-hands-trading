@@ -24,12 +24,12 @@ const HomePage = () => {
   }, [])
 
   const getPortfolioValue = async (userId: number | undefined) => {
-    const res = await axios.post(`/api/stock_data/`, {
+    const response = await axios.post(`/api/stock_data/`, {
       userId: userId,
     })
-    getPortfolioStocks = res.data
+    getPortfolioStocks = response.data
 
-    setPortfolioValue(getPortfolioStocks.totalValue)
+    setPortfolioValue(getPortfolioStocks.sumData.totalValue)
     setHoldings(getPortfolioStocks)
   }
 
