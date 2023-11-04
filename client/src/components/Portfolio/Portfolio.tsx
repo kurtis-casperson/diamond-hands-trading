@@ -10,36 +10,31 @@ const Portfolio = () => {
   const user = userContext?.user
   const userId = user?.userID
   useEffect(() => {
-    fetchData()
+    fetchData(userId)
   }, [])
 
-  const fetchData = async () => {
+  const fetchData = async (userId: number | undefined) => {
     try {
-      const response = await axios.post('/api/portfolio_data', {
-        user_id: userId,
+      const response = await axios.post('/api/stock_data/', {
+        userId: userId,
       })
-      setTableData(response.data)
-      console.log('response', response.data)
+
+      const requestedData = response.data.tableData.portfolioData
+      const stockValue = response.data.sumData.stockValue
+
+      const TableDataArray = requestedData.map((value: any, index: any) => ({
+        ...value,
+        stockValue: stockValue[index],
+      }))
+
+      setTableData(TableDataArray)
     } catch (error) {
       console.error('Error fetching data:', error)
     }
   }
 
-  // const portfolioTable = tableData.map((data) => {
-  //   return <PortfolioTable key={data} data={data} />
-  // })
-
-  // const [portfolioValue, setPortfolioValue] = useState(10000)
-  // take the value from the bought shares and add it to the table.
-  // then add or substract from the portfolioValue
-
-  // const changeTableData = (value: string | number) => setTableData(value)
-  {
-    /* // <TradeModal portfolioValue={portfolioValue} /> */
-  }
   return (
     <>
-      {/* <div>{portfolioTable}</div> */}
       <PortfolioTable tableData={tableData} />
     </>
   )
