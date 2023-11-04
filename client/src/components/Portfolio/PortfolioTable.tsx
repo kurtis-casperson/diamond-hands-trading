@@ -1,11 +1,13 @@
 import { Table } from 'react-bootstrap'
 import { TableData } from './type'
-// import { PortfolioTableRows } from './PortfolioTableRows.tsx'
+
 type Props = {
   tableData: TableData
 }
 
 const PortfolioTable = ({ tableData }: Props) => {
+  let stockChange: string
+  const percent: string = '%'
   return (
     <>
       <Table id="tableCharacterData" striped bordered hover variant="dark">
@@ -14,8 +16,9 @@ const PortfolioTable = ({ tableData }: Props) => {
             <th>Symbol</th>
             <th>Company</th>
             <th>Shares</th>
+            <th>Cost Basis</th>
             <th>Value</th>
-            <th>Change +/-</th>
+            <th>Change +/- </th>
           </tr>
         </thead>
         <tbody>
@@ -24,11 +27,22 @@ const PortfolioTable = ({ tableData }: Props) => {
               <td>{portfolioData.symbol}</td>
               <td>{portfolioData.company}</td>
               <td>{portfolioData.shares}</td>
-              <td>{portfolioData.total_value}</td>
-              <td></td>
+              <td>{portfolioData.cost_basis}</td>
+              <td>{portfolioData.stockValue}</td>
+              <td>
+                {
+                  (stockChange =
+                    (
+                      ((portfolioData.stockValue - portfolioData.cost_basis) /
+                        portfolioData.cost_basis) *
+                      100
+                    ).toFixed(2) +
+                    ' ' +
+                    percent)
+                }
+              </td>
             </tr>
           ))}
-          {/* <PortfolioTableRows tableData={tableData} /> */}
         </tbody>
       </Table>
     </>
