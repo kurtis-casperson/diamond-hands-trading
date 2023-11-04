@@ -202,24 +202,6 @@ app.post('/api/login', async (req: Request, res: Response) => {
   }
 })
 
-app.post('/api/portfolio_data', async (req: Request, res: Response) => {
-  try {
-    const { user_id } = req.body
-
-    const databaseRes = await client.query(
-      `SELECT * FROM public."stock_portfolio" WHERE "user_id" = $1`,
-      [user_id]
-    )
-    if (databaseRes.rows === 0) {
-      res.status(501).json({ error: 'error loading data' })
-    } else {
-      return res.json(databaseRes.rows)
-    }
-  } catch (err) {
-    console.log(err)
-  }
-})
-
 app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
   try {
     const { userId } = req.body
@@ -242,23 +224,33 @@ app.post(`/api/get_cash/`, async (req: Request, res: Response) => {
 
 app.post(`/api/stock_data/`, async (req: Request, res: Response) => {
   type stockType = {
-    stockValue: number[]
-    totalValue: number
-    stockSymbol: number[]
+    tableData: {}
+    sumData: {
+      stockValue: number[]
+      totalValue: number
+      stockSymbol: number[]
+    }
   }
 
   const { userId } = req.body
+  console.log('user_id', userId)
   try {
     const getPortfolioData = await client.query(
-      `SELECT "symbol", "shares" FROM public."stock_portfolio" WHERE user_id = $1`,
+      `SELECT * FROM public."stock_portfolio" WHERE user_id = $1`,
+
       [userId]
     )
-    console.log('getPortfolioData', getPortfolioData.rows)
-    let sum: stockType = {
-      totalValue: 0,
-      stockSymbol: [],
-      stockValue: [],
+    let portfolioData: stockType = {
+      tableData: {
+        portfolioData: getPortfolioData.rows,
+      },
+      sumData: {
+        totalValue: 0,
+        stockSymbol: [],
+        stockValue: [],
+      },
     }
+    let totalStockValue: number
     for (const arr of getPortfolioData.rows) {
       const symbol = arr.symbol
       const numberShares = arr.shares
@@ -267,16 +259,18 @@ app.post(`/api/stock_data/`, async (req: Request, res: Response) => {
         `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINHUB_API_KEY}`
       )
 
-      const data = stockPrices.data.c
-      console.log('data', data)
-      const totalStockValue = stockPrices.data.c * numberShares
-      sum.stockSymbol.push(symbol)
-      sum.stockValue.push(totalStockValue)
-      sum.totalValue += totalStockValue
+      totalStockValue = stockPrices.data.c * numberShares
+      portfolioData.sumData.stockSymbol.push(symbol)
+      portfolioData.sumData.stockValue.push(totalStockValue)
+      portfolioData.sumData.totalValue += totalStockValue
     }
-    // cerate an object with all of the final data/values and then send that as the response
-    console.log(sum)
-    res.json(sum)
+
+    if (getPortfolioData.rows === 0) {
+      res.status(501).json({ error: 'error loading data' })
+    }
+
+    console.log('data', getPortfolioData.rows)
+    res.json(portfolioData)
   } catch (err) {
     console.error('Error getting data:', err)
     res.status(500).json({ error: 'Error getting data' })
