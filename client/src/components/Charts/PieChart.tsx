@@ -2,8 +2,10 @@ import { Chart } from 'react-google-charts'
 import { useState, useEffect } from 'react'
 
 type PiechartType = {
-  stockValue: any
-  stockSymbol: any
+  sumData: {
+    stockValue: any
+    stockSymbol: any
+  }
 }
 
 type Props = {
@@ -12,28 +14,23 @@ type Props = {
 
 const PieChart = ({ holdings }: Props) => {
   const [data, setData] = useState<(string | number | {})[][]>([])
-  const values = Object.values(holdings)
+  const values = Object.values(holdings.sumData)
 
   useEffect(() => {
     const setPieChartData = () => {
       const holdingData = [['symbol', 'value']]
       const [, stockSymbol, stockValue] = values
-
       const newSymbolArray = stockSymbol.map((element: any) => {
         return element
       })
-
       const newValueArray = stockValue.map((element: any) => {
         return element
       })
-
       newSymbolArray.map((value: any, index: any) => {
         const newPie = [value, newValueArray[index]]
         holdingData.push(newPie)
-
         return newPie
       })
-
       setData(holdingData)
     }
     setPieChartData()
