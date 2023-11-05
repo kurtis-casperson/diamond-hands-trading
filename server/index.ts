@@ -93,7 +93,7 @@ app.post(`/api/trade/:inSellState`, async (req: Request, res: Response) => {
   try {
     const { inSellState } = req.params
 
-    const { company, symbol, user, total_value, shares, available_cash } =
+    const { company, symbol, user, cost_basis, shares, available_cash } =
       req.body
 
     const selectAllStocks = await client.query(
@@ -103,40 +103,40 @@ app.post(`/api/trade/:inSellState`, async (req: Request, res: Response) => {
 
     if (selectAllStocks.rows.length === 0) {
       const insertRowDataQuery = `
-        INSERT INTO public."stock_portfolio" ( "company","symbol", "user_id", "total_value", "shares") VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO public."stock_portfolio" ( "company","symbol", "user_id", "cost_basis", "shares") VALUES ($1, $2, $3, $4, $5)
           RETURNING *`
       client.query(insertRowDataQuery, [
         company,
         symbol,
         user,
-        total_value,
+        cost_basis,
         shares,
       ])
       if (inSellState === 'false') {
         const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
 
-        client.query(updateCashQueryBuy, [total_value, user])
+        client.query(updateCashQueryBuy, [cost_basis, user])
       }
       if (inSellState === 'true') {
         const updateCashQuerySell = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" + $1 WHERE user_id = $2`
 
-        client.query(updateCashQuerySell, [total_value, user])
+        client.query(updateCashQuerySell, [cost_basis, user])
       }
     }
 
     if (selectAllStocks.rows.length > 0 && inSellState === 'false') {
-      const updateStockQueryBuy = `UPDATE public."stock_portfolio" SET "shares" = "shares" + $1, "total_value" = "total_value" + $2 WHERE symbol = $3 AND user_id = $4`
+      const updateStockQueryBuy = `UPDATE public."stock_portfolio" SET "shares" = "shares" + $1, "cost_basis" = "cost_basis" + $2 WHERE symbol = $3 AND user_id = $4`
       const updateCashQueryBuy = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" - $1 WHERE user_id = $2`
 
-      client.query(updateCashQueryBuy, [total_value, user])
-      client.query(updateStockQueryBuy, [shares, total_value, symbol, user])
+      client.query(updateCashQueryBuy, [cost_basis, user])
+      client.query(updateStockQueryBuy, [shares, cost_basis, symbol, user])
     }
     if (selectAllStocks.rows.length > 0 && inSellState === 'true') {
-      const updateStockQuerySell = `UPDATE public."stock_portfolio" SET "shares" = "shares" - $1, "total_value" = "total_value" - $2 WHERE symbol = $3 AND user_id = $4`
+      const updateStockQuerySell = `UPDATE public."stock_portfolio" SET "shares" = "shares" - $1, "cost_basis" = "cost_basis" - $2 WHERE symbol = $3 AND user_id = $4`
       const updateCashQuerySell = `UPDATE public."cash_transactions" SET "available_cash" = "available_cash" + $1 WHERE user_id = $2`
 
-      client.query(updateCashQuerySell, [total_value, user])
-      client.query(updateStockQuerySell, [shares, total_value, symbol, user])
+      client.query(updateCashQuerySell, [cost_basis, user])
+      client.query(updateStockQuerySell, [shares, cost_basis, symbol, user])
     }
   } catch (err) {
     console.error('Error inserting data:', err)
