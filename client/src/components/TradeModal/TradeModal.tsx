@@ -30,7 +30,6 @@ const TradeModal = ({
   const [show, setShow] = useState(false)
   const [inSellState, setInSellState] = useState<boolean | null>(null)
 
-  // need to make sure that when the modal closes, the buy and sell cheked values are set to false
   const handleBuyCheckbox = () => {
     setInSellState(false)
   }
@@ -48,11 +47,15 @@ const TradeModal = ({
   const shareValue = async (stockPrice: number, numberShares: number) => {
     purchaseValue = stockPrice * numberShares
     let roundedShareValue: any = purchaseValue.toFixed(2)
+
     if (inSellState === false) {
       setCashValue(cashValue - roundedShareValue)
     }
     if (inSellState === true) {
       setCashValue(cashValue + roundedShareValue)
+    } else {
+      console.log('no good')
+      return
     }
   }
 
@@ -73,14 +76,20 @@ const TradeModal = ({
     if (inSellState === null) {
       alert('select buy or sell')
       return
-    } else {
+    }
+    if (inSellState === false && transactionValue > avaialableCash) {
+      console.log('not enough $')
+      return
+    }
+    // if(inSellState === true)
+    else {
       try {
         let response = await axios.post(`/api/trade/${inSellState}`, {
           user: userId,
           company: stockName,
           symbol: stockSymbol,
           available_cash: avaialableCash,
-          total_value: transactionValue,
+          cost_basis: transactionValue,
           shares: numberShares,
         })
         response
