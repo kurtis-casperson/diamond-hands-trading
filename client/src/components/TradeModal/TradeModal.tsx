@@ -45,20 +45,24 @@ const TradeModal = ({
   }
 
   const shareValue = async (stockPrice: number, numberShares: number) => {
-    purchaseValue = stockPrice * numberShares
+    purchaseValue = stockPrice * Number(numberShares)
     let roundedShareValue: any = purchaseValue.toFixed(2)
-
+    console.log(numberShares)
+    console.log('inSellState', inSellState)
     if (inSellState === false) {
       setCashValue(cashValue - roundedShareValue)
     }
     if (inSellState === true) {
+      console.log('cashValue', cashValue)
+      console.log(' + roundedShareValue', roundedShareValue)
       setCashValue(cashValue + roundedShareValue)
-    } else {
-      console.log('no good')
-      return
     }
+    //  else {
+    //   console.log('no good')
+    //   return
+    // }
   }
-
+  console.log('cashValue', cashValue)
   const handleInputNumberShares = (e: any) => {
     setNumberShares(e.target.value)
   }
@@ -77,11 +81,10 @@ const TradeModal = ({
       alert('select buy or sell')
       return
     }
-    if (inSellState === false && transactionValue > avaialableCash) {
-      console.log('not enough $')
-      return
-    }
-    // if(inSellState === true)
+    // if (inSellState === false && transactionValue > avaialableCash) {
+    //   console.log('not enough $')
+    //   return
+    // }
     else {
       try {
         let response = await axios.post(`/api/trade/${inSellState}`, {
