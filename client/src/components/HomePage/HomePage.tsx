@@ -12,7 +12,6 @@ const HomePage = () => {
   const [marketNews, setMarketNews] = useState([])
   const [portfolioValue, setPortfolioValue] = useState<number>()
   const [holdings, setHoldings] = useState<PortfolioDataType>()
-  let getPortfolioStocks: PortfolioDataType
 
   useEffect(() => {
     const fetchMarketNews = async () => {
@@ -27,9 +26,15 @@ const HomePage = () => {
     const response = await axios.post(`/api/stock_data/`, {
       userId: userId,
     })
-    getPortfolioStocks = response.data
+    const cashResponse = await axios.post(`/api/get_cash/`, {
+      userId: userId,
+    })
 
-    setPortfolioValue(getPortfolioStocks.sumData.totalValue)
+    const cash: any = cashResponse.data.rows[0].available_cash
+    const getPortfolioStocks: PortfolioDataType = response.data
+    const totalStockValue = getPortfolioStocks.sumData.totalValue
+    const totalPortfolioValue = totalStockValue + Number(cash)
+    setPortfolioValue(totalPortfolioValue)
     setHoldings(getPortfolioStocks)
   }
 
