@@ -46,23 +46,18 @@ const TradeModal = ({
 
   const shareValue = async (stockPrice: number, numberShares: number) => {
     purchaseValue = stockPrice * Number(numberShares)
-    let roundedShareValue: any = purchaseValue.toFixed(2)
-    console.log(numberShares)
-    console.log('inSellState', inSellState)
+    let roundedShareValue: number = Number(purchaseValue.toFixed(2))
+
     if (inSellState === false) {
-      setCashValue(cashValue - roundedShareValue)
+      const cashFunction = (prev: any) => prev - roundedShareValue
+      setCashValue(cashFunction(cashValue))
     }
     if (inSellState === true) {
-      console.log('cashValue', cashValue)
-      console.log(' + roundedShareValue', roundedShareValue)
-      setCashValue(cashValue + roundedShareValue)
+      const cashFunction = (prev: any) => prev + roundedShareValue
+      setCashValue(cashFunction(cashValue))
     }
-    //  else {
-    //   console.log('no good')
-    //   return
-    // }
   }
-  console.log('cashValue', cashValue)
+
   const handleInputNumberShares = (e: any) => {
     setNumberShares(e.target.value)
   }
@@ -81,11 +76,10 @@ const TradeModal = ({
       alert('select buy or sell')
       return
     }
-    // if (inSellState === false && transactionValue > avaialableCash) {
-    //   console.log('not enough $')
-    //   return
-    // }
-    else {
+    if (inSellState === false && transactionValue > avaialableCash) {
+      alert(`You don't have enough cash to make this trade`)
+      return
+    } else {
       try {
         let response = await axios.post(`/api/trade/${inSellState}`, {
           user: userId,
@@ -95,6 +89,7 @@ const TradeModal = ({
           cost_basis: transactionValue,
           shares: numberShares,
         })
+
         response
       } catch (error) {
         console.error(error)
@@ -103,16 +98,18 @@ const TradeModal = ({
   }
 
   useEffect(() => {
-    getUserCash(userId)
-  }, [])
+    if (show === true) {
+      getUserCash(userId)
+    }
+  }, [show])
 
   const getUserCash = async (userId: number | undefined) => {
     const res = await axios.post(`/api/get_cash/`, {
       userId: userId,
     })
-    const cash: number = res.data.rows[0].available_cash
+    const cashResponse: number = res.data.rows[0].available_cash
 
-    setCashValue(cash)
+    setCashValue(cashResponse)
   }
 
   return (
