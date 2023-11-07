@@ -29,6 +29,7 @@ const TradeModal = ({
   const [stockPrice, setStockPrice] = useState<number>()
   const [show, setShow] = useState(false)
   const [inSellState, setInSellState] = useState<boolean | null>(null)
+  const [modalShares, setModalShares] = useState<number>()
 
   const handleBuyCheckbox = () => {
     setInSellState(false)
@@ -38,10 +39,27 @@ const TradeModal = ({
     setInSellState(true)
   }
 
-  const getStockPrice = async () => {
+  const handleModalActions = async () => {
+    handleShow()
     const getStockPrice = await fetchStockPrice(stockSymbol)
     setStockPrice(getStockPrice)
-    handleShow()
+
+    try {
+      const response = await axios.post('/api/stock_data/', {
+        userId: userId,
+      })
+
+      const requestedData = response.data.tableData.portfolioData
+
+      for (const arr of requestedData) {
+        let shares = arr.shares
+        let sumOfShares = 0
+        sumOfShares += shares
+        setModalShares(sumOfShares)
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
   }
 
   const shareValue = async (stockPrice: number, numberShares: number) => {
@@ -117,7 +135,7 @@ const TradeModal = ({
       <button
         className="bg-green-400 hover:bg-green-500 font-bold py-1 px-1 rounded-full "
         onClick={() => {
-          getStockPrice()
+          handleModalActions()
         }}
       >
         Trade {stockSymbol}
@@ -137,11 +155,18 @@ const TradeModal = ({
               width: '100%',
             }}
           >
-            {stockSymbol}
+            <div>{stockSymbol}</div>
             <div>
-              <p className="text-green-400 font-bold p-2">$ {stockPrice}</p>
+              <p className="text-green-400 font-bold translate-x-10 ">
+                $ {stockPrice}
+              </p>
             </div>
           </Modal.Title>
+          <div>
+            <p className=" flex text-gray-500 translate-y-10">
+              shares: {modalShares}
+            </p>
+          </div>
         </Modal.Header>
         <Modal.Body>
           <div>
