@@ -1,7 +1,6 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap'
 import { Gem } from 'react-bootstrap-icons'
-import Cookies from 'universal-cookie'
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import { UserContext } from '../../utils/UserContextMethods'
 import './NavBar.css'
 import { Link } from 'react-router-dom'
@@ -9,14 +8,10 @@ const NavBar = () => {
   const userContext = useContext(UserContext)
   const user = userContext?.user
   const setUser = userContext?.setUser
-  const cookies = new Cookies()
 
   const jwtLogout = () => {
     setUser(null)
-    cookies.remove('jwt_authorization')
   }
-
-  // protected route
 
   return (
     <>

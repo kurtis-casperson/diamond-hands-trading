@@ -1,19 +1,16 @@
 import './Login.css'
 import LoginForm from './LoginForm'
-import Cookies from 'universal-cookie'
 import jwt from 'jwt-decode'
 import { useState, useContext } from 'react'
 import { UserContext } from '../../utils/UserContextMethods'
 
 const LoginPage = () => {
   const userContext = useContext(UserContext)
+
   const setUser = userContext?.setUser
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  // initialize cookies package
-  const cookies = new Cookies()
 
   const jwtLogin = (jwt_token: string) => {
     // decode the token
@@ -21,11 +18,6 @@ const LoginPage = () => {
 
     //set user state
     setUser(decoded)
-
-    // set cookie
-    cookies.set('jwt_authorization', jwt_token, {
-      expires: new Date(decoded.exp * 1000),
-    })
   }
 
   return (

@@ -1,9 +1,5 @@
 import axios from 'axios'
-import { Nav } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { login } from '../../utils/AuthMethods'
-import { useState, useContext, useEffect } from 'react'
-import { UserContextType, UserContext } from '../../utils/UserContextMethods'
 
 type Props = {
   email: string

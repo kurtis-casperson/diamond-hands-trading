@@ -1,4 +1,4 @@
-import SignupButton from './signupButton'
+import SignupButton from './SignupButton'
 import LoginButton from './LoginButton'
 import './LoginForm.css'
 
