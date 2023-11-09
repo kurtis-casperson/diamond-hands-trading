@@ -6,7 +6,6 @@ type Props = {
 }
 
 const PortfolioTable = ({ tableData }: Props) => {
-  let stockChange: string
   const percent: string = '%'
   return (
     <>
@@ -30,16 +29,13 @@ const PortfolioTable = ({ tableData }: Props) => {
               <td>{portfolioData.cost_basis}</td>
               <td>{portfolioData.stockValue}</td>
               <td>
-                {
-                  (stockChange =
-                    (
-                      ((portfolioData.stockValue - portfolioData.cost_basis) /
-                        portfolioData.cost_basis) *
-                      100
-                    ).toFixed(2) +
-                    ' ' +
-                    percent)
-                }
+                {(
+                  ((portfolioData.stockValue - portfolioData.cost_basis) /
+                    portfolioData.cost_basis) *
+                  100
+                ).toFixed(2) +
+                  ' ' +
+                  percent}
               </td>
             </tr>
           ))}
