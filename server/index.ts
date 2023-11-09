@@ -81,7 +81,7 @@ app.get('/api/marketNews', async (req: Request, res: Response) => {
 const { Client } = require('pg')
 
 const client = new Client({
-  host: 'localhost',
+  host: 'database-1-diamond-trading.czggh6d9nqaf.us-west-1.rds.amazonaws.com',
   user: 'postgres',
   port: 5432,
   database: 'postgres',
