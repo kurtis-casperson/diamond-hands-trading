@@ -2,9 +2,9 @@ import { createContext } from 'react'
 import { UserContextType, UserContext } from './types'
 
 const getUser: any = localStorage.getItem('user')
-const user = JSON.parse(getUser || '{}') || null
+const user = JSON.parse(getUser || '{}')
 
-const UserContext = createContext<UserContextType | null>(user)
+const UserContext = createContext<UserContextType>(user)
 
 export const UserProvider = UserContext.Provider
 

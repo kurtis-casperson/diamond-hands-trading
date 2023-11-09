@@ -6,7 +6,6 @@ import { UserContext } from '../../utils/UserContextMethods'
 
 const LoginPage = () => {
   const userContext = useContext(UserContext)
-
   const setUser = userContext?.setUser
 
   const [email, setEmail] = useState('')
