@@ -22,7 +22,7 @@ const PortfolioTable = ({ tableData }: Props) => {
           </tr>
         </thead>
         <tbody>
-          {tableData.map((portfolioData: string | number, index) => (
+          {tableData.map((portfolioData: any, index) => (
             <tr key={index}>
               <td>{portfolioData.symbol}</td>
               <td>{portfolioData.company}</td>
