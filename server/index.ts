@@ -14,10 +14,13 @@ app.listen(PORT, () => {
   console.log(`listening on ${PORT}`)
 })
 
-app.use(cors({ origin: 'http://localhost:5173', optionsSuccessStatus: 200 }))
+app.use(cors({ origin: process.env.CLIENT_URL, optionsSuccessStatus: 200 }))
 
 app.use(express.static(path.join(__dirname, '../../client/dist')))
-
+const GC_RELEASE = '2023-11-30'
+app.get('/release', (req: any, res: any) => {
+  res.send(GC_RELEASE)
+})
 app.get('/:route(Trade|Login|Portfolio)', (req: any, res: any) => {
   res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'))
 })
@@ -139,27 +142,29 @@ app.post(`/api/trade/:inSellState`, async (req: any, res: any) => {
     res.status(500).json({ error: 'Error inserting data' })
   }
 })
-
+app.get('/dbtest', async (req: any, res: any) => {
+  const databaseRes = await client.query(`SELECT "user_email" FROM "user_data"`)
+  res.send(databaseRes)
+})
 app.post('/api/signup', async (req: any, res: any) => {
   try {
     const { user_email, user_password } = req.body
 
-    const signupQuery = `INSERT INTO public."user_data" ( "user_email","user_password") VALUES ($1, $2)`
+    const signupQuery = `INSERT INTO "user_data" ( "user_email","user_password") VALUES ($1, $2)`
 
     const databaseRes = await client.query(
-      `SELECT "user_email" FROM public."user_data" WHERE "user_email" = $1`,
+      `SELECT "user_email" FROM "user_data" WHERE "user_email" = $1`,
       [user_email]
     )
-    const selectUser = `SELECT "user_id" FROM public."user_data" WHERE "user_email" = $1`
+    const selectUser = `SELECT "user_id" FROM "user_data" WHERE "user_email" = $1`
 
     const InsertCashQuery = `
-    INSERT INTO public."cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
+    INSERT INTO "cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
       RETURNING *`
 
     if (databaseRes.rows.length > 0) {
       res.status(501).json({ error: 'User already exists' })
     } else {
-      res.status(201).json({ message: 'Successfully Registered' })
       await client.query(signupQuery, [user_email, user_password])
 
       const selectedUserID = await client.query(selectUser, [user_email])
@@ -168,12 +173,21 @@ app.post('/api/signup', async (req: any, res: any) => {
         selectedUserID.rows[0].user_id,
         100000,
       ])
+      await client.commit()
+      res.status(201).json({ message: 'Successfully Registered' })
     }
   } catch (err) {
     console.log(err)
+
+    res.status(501).json({ error: 'Error creating user' })
   }
 })
-
+app.get('/dbtest', async (req: any, res: any) => {
+  const databaseRes = await client.query(
+    `SELECT "user_email" FROM public."user_data"`
+  )
+  res.send(databaseRes)
+})
 app.post('/api/login', async (req: any, res: any) => {
   try {
     const { user_email, user_password } = req.body
