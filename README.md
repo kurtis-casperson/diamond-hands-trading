@@ -33,10 +33,20 @@ Stock Trading Site Functionality :
 
 1. Open s sperate terminal window
 2. run 'cd server'
-3. Create .env file and include REACT_APP_bearer_token=XXX'
-4. run 'npm install'
-5. run 'cd back-end'
-6. run 'npm run start'
+3. Create .env file and include REACT_APP_bearer_token=XXX
+4. Gain access to a Finhub API key and add FINHUB_API_KEY-XXX to .env file
+5. Gain access to a Financial Modeling Pro API key and add FMP_API_KEY-XXX to .env file
+6. run 'npm install'
+7. run 'npm run startServer'
+
+### Database Setup
+
+1. Setup a postgres database with these details:
+   `host: 'localHost'`
+   `user: 'postgres'`
+   `password: process.env.PGADMIN_PWD`
+   `port: 5432`
+   `database: 'postgres'`
 
 ## Author
 
