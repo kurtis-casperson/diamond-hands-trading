@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom'
 type Props = {
   email: string
   password: string
+  setErrorMessage: (value: string) => void
 }
 
-const SignupButton = ({ email, password }: Props) => {
+const SignupButton = ({ email, password, setErrorMessage }: Props) => {
   const navigate = useNavigate()
 
   const handleSignup = async (email: string, password: string, event: any) => {
@@ -18,30 +19,42 @@ const SignupButton = ({ email, password }: Props) => {
           user_password: password,
         })
         if (response.status === 201) {
-          alert('you signed up successfully')
+          setErrorMessage('you signed up successfully')
           navigate('/')
         }
       } catch (error: any) {
         if (error.response.status === 501) {
-          alert('signup error, user already exists')
+          setErrorMessage('signup error, user already exists')
+        }
+        if (error.response.status === 500) {
+          setErrorMessage('server error, please try again')
         }
       }
     }
   }
   const userValidation = (email: string, password: string) => {
     if (!email) {
+      setErrorMessage('Email is required')
       return false
     }
     if (email.includes(' ')) {
+      setErrorMessage('Invalid Email, Remove Spaces')
+
       return false
     }
     if (!email.includes('@')) {
+      setErrorMessage('Invalid Email')
+
       return false
     }
     if (!password) {
+      setErrorMessage('Password Required')
+
       return false
     }
     if (password.includes(' ')) {
+      setErrorMessage('Invalid Password, Remove Spaces')
+
       return false
     }
     return { status: true, msg: 'valid' }

@@ -5,9 +5,10 @@ type Props = {
   email: string
   password: string
   jwtLogin: (jwt_token: string) => void
+  setErrorMessage: (value: string) => void
 }
 
-const LoginButton = ({ email, password, jwtLogin }: Props) => {
+const LoginButton = ({ email, password, jwtLogin, setErrorMessage }: Props) => {
   const navigate = useNavigate()
 
   const handleLogin = async (email: string, password: string, event: any) => {
@@ -27,7 +28,7 @@ const LoginButton = ({ email, password, jwtLogin }: Props) => {
       } catch (error: any) {
         console.error(error)
         if (error) {
-          alert(
+          setErrorMessage(
             `Oops.. check your login details, or singup to create an account`
           )
         }

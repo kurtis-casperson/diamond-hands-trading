@@ -1,6 +1,7 @@
 import SignupButton from './SignupButton'
 import LoginButton from './LoginButton'
 import './LoginForm.css'
+import { useState } from 'react'
 
 type Props = {
   email: string
@@ -24,6 +25,8 @@ const LoginForm = ({
   function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
     setPassword(event.target.value)
   }
+
+  const [errorMessage, setErrorMessage] = useState('')
 
   return (
     <div id="border">
@@ -57,16 +60,26 @@ const LoginForm = ({
             required
           />
         </div>
+        <div id="error-message" className="p-3 text-gray-500">
+          {errorMessage}
+        </div>
         <div className="flex justify-center">
           {
             <LoginButton
               email={email}
               password={password}
               jwtLogin={jwtLogin}
+              setErrorMessage={setErrorMessage}
             />
           }
 
-          {<SignupButton email={email} password={password} />}
+          {
+            <SignupButton
+              email={email}
+              password={password}
+              setErrorMessage={setErrorMessage}
+            />
+          }
         </div>
       </form>
     </div>
