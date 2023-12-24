@@ -30,7 +30,7 @@ const TradeModal = ({
   const [show, setShow] = useState(false)
   const [inSellState, setInSellState] = useState<boolean | null>(null)
   const [modalShares, setModalShares] = useState<number>()
-
+  const server = localStorage.getItem('server')
   const handleBuyCheckbox = () => {
     setInSellState(false)
   }
@@ -45,7 +45,7 @@ const TradeModal = ({
     setStockPrice(getStockPrice)
 
     try {
-      const response = await axios.post('/api/stock_data/', {
+      const response = await axios.post(server + '/api/stock_data/', {
         userId: userId,
       })
 
@@ -99,7 +99,7 @@ const TradeModal = ({
       return
     } else {
       try {
-        let response = await axios.post(`/api/trade/${inSellState}`, {
+        let response = await axios.post(server + `/api/trade/${inSellState}`, {
           user: userId,
           company: stockName,
           symbol: stockSymbol,
@@ -122,7 +122,7 @@ const TradeModal = ({
   }, [show])
 
   const getUserCash = async (userId: number | undefined) => {
-    const res = await axios.post(`/api/get_cash/`, {
+    const res = await axios.post(server + `/api/get_cash/`, {
       userId: userId,
     })
     const cashResponse: number = res.data.rows[0].available_cash

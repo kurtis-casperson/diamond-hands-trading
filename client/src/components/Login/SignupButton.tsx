@@ -9,12 +9,12 @@ type Props = {
 
 const SignupButton = ({ email, password, setErrorMessage }: Props) => {
   const navigate = useNavigate()
-
+  const server = localStorage.getItem('server')
   const handleSignup = async (email: string, password: string, event: any) => {
     event.preventDefault()
     if (userValidation(email, password)) {
       try {
-        let response = await axios.post('/api/signup', {
+        let response = await axios.post(server + '/api/signup', {
           user_email: email,
           user_password: password,
         })

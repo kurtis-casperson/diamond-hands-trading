@@ -12,10 +12,10 @@ const Portfolio = () => {
   useEffect(() => {
     fetchData(userId)
   }, [])
-
+  const server = localStorage.getItem('server')
   const fetchData = async (userId: number | undefined) => {
     try {
-      const response = await axios.post('/api/stock_data/', {
+      const response = await axios.post(server + '/api/stock_data/', {
         userId: userId,
       })
 

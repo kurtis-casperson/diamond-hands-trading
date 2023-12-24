@@ -21,12 +21,12 @@ const HomePage = () => {
     fetchMarketNews()
     getPortfolioValue(userId)
   }, [])
-
+  const server = localStorage.getItem('server')
   const getPortfolioValue = async (userId: number | undefined) => {
-    const response = await axios.post(`/api/stock_data/`, {
+    const response = await axios.post(server + `/api/stock_data/`, {
       userId: userId,
     })
-    const cashResponse = await axios.post(`/api/get_cash/`, {
+    const cashResponse = await axios.post(server + `/api/get_cash/`, {
       userId: userId,
     })
 
