@@ -23,7 +23,33 @@ router.get('/marketNews', async (req: any, res: any) => {
     res.status(500).json({ error: 'Internal server error' })
   }
 })
-
+const sqlStatements = [
+  `CREATE TABLE public.user_data (user_email character varying(100) NOT NULL,user_password character varying(100) NOT NULL,user_id integer NOT NULL);`,
+  `CREATE TABLE public.stock_portfolio (user_id integer,company character varying(100), symbol character varying(10), shares integer, cost_basis numeric);`,
+  `CREATE TABLE IF NOT EXISTS public.cash_transactions(transaction_id integer,user_id integer,transaction_type character varying(10) COLLATE pg_catalog."default",available_cash numeric,portfolio_value numeric)`,
+  `CREATE SEQUENCE IF NOT EXISTS public.stock_portfolio_user_id_seq INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 OWNED BY stock_portfolio.user_id;`,
+  `CREATE SEQUENCE public.user_data_user_data_seq AS integer START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;`,
+  `ALTER SEQUENCE public.stock_portfolio_user_id_seq OWNED BY public.stock_portfolio.user_id;`,
+  `ALTER SEQUENCE public.user_data_user_data_seq OWNED BY public.user_data.user_id;`,
+  `ALTER TABLE ONLY public.user_data ALTER COLUMN user_id SET DEFAULT nextval('public.user_data_user_data_seq'::regclass);`,
+  `ALTER TABLE ONLY public.user_data ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);`,
+  `ALTER TABLE ONLY public.stock_portfolio ADD CONSTRAINT stock_portfolio_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.user_data(user_id);`,
+]
+router.get('/createTables', async (req: any, res: any) => {
+  const resp = createTables()
+  res.send({ message: 'created' })
+})
+const createTables = async () => {
+  sqlStatements.forEach(async (sqlStatement) => {
+    try {
+      console.log(sqlStatement)
+      await client.query(sqlStatement)
+    } catch (e) {
+      console.log(sqlStatement, e)
+    }
+  })
+  return true
+}
 router.post(`/trade/:inSellState`, async (req: any, res: any) => {
   try {
     const { inSellState } = req.params
@@ -119,10 +145,15 @@ router.post('/signup', async (req: any, res: any) => {
   }
 })
 router.get('/dbtest', async (req: any, res: any) => {
-  const databaseRes = await client.query(
-    `SELECT "user_email" FROM public."user_data"`
-  )
-  res.send(databaseRes)
+  try {
+    const databaseRes = await client.query(
+      `SELECT "user_email" FROM public."user_data"`
+    )
+    res.send(databaseRes)
+  } catch (e) {
+    console.log('dbtest', e)
+    res.send({ error: 'Error querying user' })
+  }
 })
 router.post('/login', async (req: any, res: any) => {
   try {
