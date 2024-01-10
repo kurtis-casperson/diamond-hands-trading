@@ -11,7 +11,7 @@ import './App.css'
 
 function App() {
   const userContext = useContext(UserContext)
-  const server = 'http://35.88.56.17:4321'
+  const server = 'http://diamond-hand-trading.com:4321'
   const [user, setUser] = useState(userContext ? userContext.user : null)
 
   useEffect(() => {
