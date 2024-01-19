@@ -10,22 +10,23 @@ import { useState, useContext, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const userContext = useContext(UserContext)
-  const server = 'http://diamond-hand-trading.com:4321'
-  const [user, setUser] = useState(userContext ? userContext.user : null)
+  const user = useContext(UserContext)
+  // const server = 'http://diamond-hand-trading.com:4321'
+  const server = 'http://localhost:4321'
+  // const [user, setUser] = useState(userContext ? userContext.user : null)
 
   useEffect(() => {
-    localStorage.setItem('user', JSON.stringify(user))
+    // localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('server', server)
   }, [user])
 
   return (
     <>
-      <UserProvider value={{ user, setUser }}>
+      <UserProvider value={user}>
         <NavBar />
 
         <Routes>
-          <Route path="/" element={<Login />} />
+          {<Route path="/" element={<Login />} />}
           <Route
             path="/Home"
             element={
