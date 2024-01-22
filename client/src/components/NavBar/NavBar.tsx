@@ -30,6 +30,7 @@ const NavBar = () => {
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
+                  marginTop: '40px',
                 }}
               >
                 <Nav.Item>
@@ -51,7 +52,7 @@ const NavBar = () => {
               <div
                 className="ml-auto"
                 style={{
-                  marginTop: '10px',
+                  marginTop: '40px',
                 }}
               >
                 <Nav.Item>
