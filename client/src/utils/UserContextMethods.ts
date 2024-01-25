@@ -2,7 +2,7 @@ import { createContext } from 'react'
 import { UserContextType, UserContext } from './types'
 
 const getUser: any = localStorage.getItem('user')
-const user = getUser ? JSON.parse(getUser) : {}
+const user = JSON.parse(getUser || '{}')
 
 const UserContext = createContext<UserContextType | null>(user)
 

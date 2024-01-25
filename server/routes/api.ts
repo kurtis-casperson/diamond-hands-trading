@@ -3,6 +3,7 @@ const axios = require('axios')
 const express = require('express')
 const jwt = require('jsonwebtoken')
 import client from '../db'
+const cors = require('cors')
 
 require('dotenv').config()
 
@@ -108,8 +109,10 @@ router.get('/dbtest', async (req: any, res: any) => {
   const databaseRes = await client.query(`SELECT "user_email" FROM "user_data"`)
   res.send(databaseRes)
 })
-router.post('/signup', async (req: any, res: any) => {
+
+router.post('/signup', cors({ origin: '*' }), async (req: any, res: any) => {
   try {
+    client.query('BEGIN')
     const { user_email, user_password } = req.body
 
     const signupQuery = `INSERT INTO "user_data" ( "user_email","user_password") VALUES ($1, $2)`
@@ -118,11 +121,12 @@ router.post('/signup', async (req: any, res: any) => {
       `SELECT "user_email" FROM "user_data" WHERE "user_email" = $1`,
       [user_email]
     )
+
     const selectUser = `SELECT "user_id" FROM "user_data" WHERE "user_email" = $1`
 
     const InsertCashQuery = `
     INSERT INTO "cash_transactions" ( "user_id","available_cash") VALUES ($1, $2)
-      RETURNING *`
+    RETURNING *`
 
     if (databaseRes.rows.length > 0) {
       res.status(501).json({ error: 'User already exists' })
@@ -135,10 +139,11 @@ router.post('/signup', async (req: any, res: any) => {
         selectedUserID.rows[0].user_id,
         100000,
       ])
-      await client.commit()
+
       res.status(201).json({ message: 'Successfully Registered' })
     }
   } catch (err) {
+    await client.query('ROLLBACK')
     console.log(err)
 
     res.status(501).json({ error: 'Error creating user' })
